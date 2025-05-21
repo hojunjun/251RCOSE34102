@@ -3,12 +3,13 @@
 
 #include "types.h"
 
+void init_processes();
+
 void create_process(int pid, int arrival_time, int burst_time, int priority);
 void create_random_process(int pid);
-void create_processes(int random);
+void create_processes(int random, int num);
 
-void reset_processes();
-void print_process();
+void print_process(Process *p);
 void print_process_table();
 
 #endif

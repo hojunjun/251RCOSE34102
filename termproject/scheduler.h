@@ -4,7 +4,6 @@
 #include "types.h"
 
 void init_scheduler();
-void reset_scheduler();
 
 void run_fcfs();
 void run_sjf();

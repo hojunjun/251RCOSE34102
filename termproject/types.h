@@ -1,11 +1,16 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#define MAX_PROCESSES 100
-#define MAX_TIME 10000
-#define MAX_QUEUE_SIZE 100
+#define MAX_PROCESSES 10
+#define MAX_ARRIVAL_TIME 50
+#define MAX_BURST_TIME 20
+#define MIN_BURST_TIME 5
+#define MAX_PRIORITY 10
+#define MAX_QUEUE_SIZE MAX_PROCESSES
 #define TIME_QUANTUM 4
-#define MAX_IO 5
+#define MAX_IO 3
+#define MAX_IO_BURST_TIME 5
+#define MAX_TIME MAX_ARRIVAL_TIME + MAX_PROCESSES * (MAX_BURST_TIME + MAX_IO * MAX_IO_BURST_TIME)
 
 typedef enum {
     READY,
@@ -17,6 +22,7 @@ typedef enum {
 typedef struct {
     int request_time;
     int burst_time;
+    int io_time;
     int completed;
 } IO;
 
@@ -61,6 +67,5 @@ extern Queue ready_queue;
 extern Queue waiting_queue;
 extern GanttItem gantt[MAX_TIME];
 extern int num_gantt_items;
-extern int current_time;
 
 #endif

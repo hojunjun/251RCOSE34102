@@ -10,23 +10,27 @@
 #include "scheduler.h"
 
 Process processes[MAX_PROCESSES];
+Process current_processes[MAX_PROCESSES];
 int num_processes = 0;
 int completed_processes = 0;
 Queue ready_queue;
 Queue waiting_queue;
 GanttItem gantt[MAX_TIME];
 int num_gantt_items = 0;
-int current_time = 0;
 
 void init() {
-    init_io();
     init_scheduler();
+    init_processes();
     init_queues();
+}
+
+void reset() {
+    init();
 }
 
 int main() {
     srand(time(NULL));
-    int choice;
+    int choice, number;
     printf("CPU Scheduling Simulator\n");
     printf("========================================\n");
     printf("1. Random\n");
@@ -34,52 +38,51 @@ int main() {
     printf("========================================\n");
     printf("Enter your choice: ");
     scanf("%d", &choice);
-    
-    init();
+    printf("Enter number of processes: ");
+    scanf("%d", &number);
+
 
     if (choice == 2) {
-        create_processes(0);
+        create_processes(0, number);
     } else {
-        create_processes(1);
+        create_processes(1, number);
     }
 
+    init();
+    for (int i = 0; i < num_processes; i++){
+        print_process(&current_processes[i]);
+    }
     print_process_table();
 
     printf("Running FCFS\n");
-    reset_scheduler();
+    reset();
     run_fcfs();
-    print_gantt();
     evaluate();
 
-    printf("Running SJF\n");
-    reset_scheduler();
-    run_sjf();
-    print_gantt();
-    evaluate();
+    /* printf("Running SJF\n"); */
+    /* reset(); */
+    /* run_sjf(); */
+    /* evaluate(); */
 
-    printf("Running SJF Non-Preemptive\n");
-    reset_scheduler();
-    run_sjf_nonpreemptive();
-    print_gantt();
-    evaluate();
+    /* printf("Running SJF Non-Preemptive\n"); */
+    /* reset(); */
+    /* run_sjf_nonpreemptive(); */
+    /* evaluate(); */
 
-    printf("Running Priority\n");
-    reset_scheduler();
-    run_priority();
-    print_gantt();
-    evaluate();
+    /* printf("Running Priority\n"); */
+    /* reset(); */
+    /* run_priority(); */
+    /* evaluate(); */
 
-    printf("Running Priority Non-Preemptive\n");
-    reset_scheduler();
-    run_priority_nonpreemptive();
-    print_gantt();
-    evaluate();
+    /* printf("Running Priority Non-Preemptive\n"); */
+    /* reset(); */
+    /* run_priority_nonpreemptive(); */
+    /* evaluate(); */
     
-    printf("Running RR\n");
-    reset_scheduler();
-    run_rr();
-    print_gantt();
-    evaluate();
+    /* printf("Running RR\n"); */
+    /* reset(); */
+    /* run_rr(); */
+    /* evaluate(); */
 
-    return 0;
+    /* return 0; */
 }

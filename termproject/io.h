@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-void init_io();
-
-void update_waiting_processes();
+void init_io(IO *io, int io_count, int burst);
 
 #endif
