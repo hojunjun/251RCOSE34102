@@ -21,26 +21,6 @@ void run_fcfs(){
     int current_pid = -1;
 
     while(current_time < MAX_TIME && completed_processes != num_processes){
-        for (int i = 0; i < num_processes; i++) {
-            if (current_time==current_processes[i].arrival_time){
-                current_processes[i].state = READY;
-                enqueue(&ready_queue, &current_processes[i]);
-            }
-        }
-
-        int waiting_size = waiting_queue.size;
-        int waiting_front = waiting_queue.front;
-        for (int i = 0; i < waiting_size; i++) {
-            Process* waiting = waiting_queue.processes[waiting_front+i];
-            if (waiting->io[waiting->current_io].io_time == waiting->io[waiting->current_io].burst_time) {
-                waiting->io[waiting->current_io].completed = 1;
-                waiting->current_io = -1;
-                waiting->state = READY;
-                remove_process(&waiting_queue, waiting);
-                enqueue(&ready_queue, waiting);
-            }
-        }
-
         if (current_pid > -1){
             if (current->remaining_time > 0){
                 current->cpu_time++;
@@ -65,6 +45,27 @@ void run_fcfs(){
                 completed_processes++;
             }
         }
+
+        for (int i = 0; i < num_processes; i++) {
+            if (current_time==current_processes[i].arrival_time){
+                current_processes[i].state = READY;
+                enqueue(&ready_queue, &current_processes[i]);
+            }
+        }
+
+        int waiting_size = waiting_queue.size;
+        int waiting_front = waiting_queue.front;
+        for (int i = 0; i < waiting_size; i++) {
+            Process* waiting = waiting_queue.processes[waiting_front+i];
+            if (waiting->io[waiting->current_io].io_time == waiting->io[waiting->current_io].burst_time) {
+                waiting->io[waiting->current_io].completed = 1;
+                waiting->current_io = -1;
+                waiting->state = READY;
+                remove_process(&waiting_queue, waiting);
+                enqueue(&ready_queue, waiting);
+            }
+        }
+
         if (ready_queue.size > 0 && current_pid == -1){
             current = dequeue(&ready_queue);
             current->state = RUNNING;
@@ -74,11 +75,158 @@ void run_fcfs(){
             current_pid = current->pid;
             current_start = current_time;
         }
+
         update_queues();
         current_time++;
     }
-    printf("%d\n", current_time);
-    printf("%d %d\n", ready_queue.size, waiting_queue.size);
+}
+
+void run_sjf(){
+    Process* current = NULL;
+    int current_time = 0;
+    int current_start = 0;
+    int current_pid = -1;
+
+    while(current_time < MAX_TIME && completed_processes != num_processes){
+        if (current_pid > -1){
+            if (current->remaining_time > 0){
+                current->cpu_time++;
+                current->remaining_time--;
+                for (int i = 0; i < current->io_count; i++){
+                    if (current->io[i].request_time == current->cpu_time){
+                        current->state = WAITING;
+                        current->current_io = i;
+                        current_pid = -1;
+                        add_to_gantt(current->pid, current_start, current_time);
+                        enqueue(&waiting_queue, current);
+                        break;
+                    }
+                }
+            }
+            if (current->remaining_time==0){
+                current->state = TERMINATED;
+                current->completion_time = current_time;
+                current->turnaround_time = current->completion_time - current->arrival_time;
+                current_pid = -1;
+                add_to_gantt(current->pid, current_start, current_time);
+                completed_processes++;
+            }
+        }
+
+        for (int i = 0; i < num_processes; i++) {
+            if (current_time==current_processes[i].arrival_time){
+                current_processes[i].state = READY;
+                enqueue(&ready_queue, &current_processes[i]);
+                
+                if (current_pid > -1 && current->remaining_time > current_processes[i].remaining_time){
+                    current->state = READY;
+                    current_pid = -1;
+                    add_to_gantt(current->pid, current_start, current_time);
+                    enqueue(&ready_queue, current);
+                }
+            }
+        }
+
+        int waiting_size = waiting_queue.size;
+        int waiting_front = waiting_queue.front;
+        for (int i = 0; i < waiting_size; i++) {
+            Process* waiting = waiting_queue.processes[waiting_front+i];
+            if (waiting->io[waiting->current_io].io_time == waiting->io[waiting->current_io].burst_time) {
+                waiting->io[waiting->current_io].completed = 1;
+                waiting->current_io = -1;
+                waiting->state = READY;
+                remove_process(&waiting_queue, waiting);
+                enqueue(&ready_queue, waiting);
+
+                if (current_pid > -1 && current->remaining_time > waiting->remaining_time){
+                    current->state = READY;
+                    current_pid = -1;
+                    add_to_gantt(current->pid, current_start, current_time);
+                    enqueue(&ready_queue, current);
+                }
+            }
+        }
+
+        if (ready_queue.size > 0 && current_pid == -1){
+            current = get_shortest_job(&ready_queue);
+            current->state = RUNNING;
+            if (current->response_time == -1){
+                current->response_time = current_time - current->arrival_time;
+            }
+            current_pid = current->pid;
+            current_start = current_time;
+        }
+
+        update_queues();
+        current_time++;
+    }
+}
+
+void run_sjf_nonpreemptive(){
+    Process* current = NULL;
+    int current_time = 0;
+    int current_start = 0;
+    int current_pid = -1;
+    
+    while(current_time < MAX_TIME && completed_processes != num_processes){
+        if (current_pid > -1){
+            if (current->remaining_time > 0){
+                current->cpu_time++;
+                current->remaining_time--;
+                for (int i = 0; i < current->io_count; i++){
+                    if (current->io[i].request_time == current->cpu_time){
+                        current->state = WAITING;
+                        current->current_io = i;
+                        current_pid = -1;
+                        add_to_gantt(current->pid, current_start, current_time);
+                        enqueue(&waiting_queue, current);
+                        break;
+                    }
+                }
+            }
+            if (current->remaining_time==0){
+                current->state = TERMINATED;
+                current->completion_time = current_time;
+                current->turnaround_time = current->completion_time - current->arrival_time;
+                current_pid = -1;
+                add_to_gantt(current->pid, current_start, current_time);
+                completed_processes++;
+            }
+        }
+
+        for (int i = 0; i < num_processes; i++) {
+            if (current_time==current_processes[i].arrival_time){
+                current_processes[i].state = READY;
+                enqueue(&ready_queue, &current_processes[i]);
+            }
+        }
+
+        int waiting_size = waiting_queue.size;
+        int waiting_front = waiting_queue.front;
+        for (int i = 0; i < waiting_size; i++) {
+            Process* waiting = waiting_queue.processes[waiting_front+i];
+            if (waiting->io[waiting->current_io].io_time == waiting->io[waiting->current_io].burst_time) {
+                waiting->io[waiting->current_io].completed = 1;
+                waiting->current_io = -1;
+                waiting->state = READY;
+                remove_process(&waiting_queue, waiting);
+                enqueue(&ready_queue, waiting);
+            }
+        }
+
+        if (ready_queue.size > 0 && current_pid == -1){
+            current = get_shortest_job(&ready_queue);
+            current->state = RUNNING;
+            if (current->response_time == -1){
+                current->response_time = current_time - current->arrival_time;
+            }
+            current_pid = current->pid;
+            current_start = current_time;
+        }
+
+        update_queues();
+        current_time++;
+    }
 }
 
 void add_to_gantt(int pid, int start_time, int end_time){

@@ -31,10 +31,10 @@ void create_process(int pid, int arrival_time, int burst_time, int priority) {
     p->completion_time = 0;
     p->response_time = -1;
     p->state = READY;
-    p->io_count = 2;
-    int request_times[2] = {2, 5};
-    int burst_times[2] = {1, 2};
-    create_io(p->io, p->io_count, request_times, burst_times);
+    p->io_count = 0;
+    //int request_times[2] = {2, 5};
+    //int burst_times[2] = {1, 2};
+    //create_io(p->io, p->io_count, request_times, burst_times);
     p->current_io = 0;
     p->cpu_time = 0;
 }
@@ -76,11 +76,9 @@ void create_processes(int random, int num) {
             create_random_process(0);
         }
     } else {
-        create_process(0, 0, 14, 2);
-        create_process(0, 2, 11, 3);
-        create_process(0, 4, 15, 1);
-        create_process(0, 5, 17, 4);
-        create_process(0, 7, 14, 2);
+        create_process(0, 0, 10, 2);
+        create_process(0, 2, 5, 3);
+        create_process(0, 4, 3, 1);
     }
 }
 

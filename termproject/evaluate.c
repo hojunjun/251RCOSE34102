@@ -113,4 +113,5 @@ void evaluate(){
     printf("Average turnaround time: %.2f\tMax: %2d, Min:%2d\n", get_average_turnaround_time(), get_max_turnaround_time(), get_min_turnaround_time());
     printf("Average response time: %.2f\tMax: %2d, Min:%2d\n", get_average_response_time(), get_max_response_time(), get_min_response_time());
     printf("Average completion time: %.2f\tMax: %2d, Min:%2d\n", get_average_completion_time(), get_max_completion_time(), get_min_completion_time());
+    printf("\n========================================\n\n");
 }

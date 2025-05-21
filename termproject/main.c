@@ -60,15 +60,15 @@ int main() {
     run_fcfs();
     evaluate();
 
-    /* printf("Running SJF\n"); */
-    /* reset(); */
-    /* run_sjf(); */
-    /* evaluate(); */
+    printf("Running SJF\n");
+    reset();
+    run_sjf();
+    evaluate();
 
-    /* printf("Running SJF Non-Preemptive\n"); */
-    /* reset(); */
-    /* run_sjf_nonpreemptive(); */
-    /* evaluate(); */
+    printf("Running SJF Non-Preemptive\n");
+    reset();
+    run_sjf_nonpreemptive();
+    evaluate();
 
     /* printf("Running Priority\n"); */
     /* reset(); */
