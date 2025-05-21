@@ -54,6 +54,7 @@ typedef struct {
 } GanttItem;
 
 extern Process processes[MAX_PROCESSES];
+extern Process current_processes[MAX_PROCESSES];
 extern int num_processes;
 extern int completed_processes;
 extern Queue ready_queue;

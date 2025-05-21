@@ -43,7 +43,7 @@ int main() {
         create_processes(1);
     }
 
-    print_processes_table();
+    print_process_table();
 
     printf("Running FCFS\n");
     reset_scheduler();
@@ -80,4 +80,6 @@ int main() {
     run_rr();
     print_gantt();
     evaluate();
+
+    return 0;
 }
