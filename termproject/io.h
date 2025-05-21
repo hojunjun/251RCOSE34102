@@ -3,6 +3,7 @@
 
 #include "types.h"
 
-void init_io(IO *io, int io_count, int burst);
+void create_io(IO *io, int io_count, int* request_times, int* burst_times);
+void create_random_io(IO *io, int io_count, int burst);
 
 #endif

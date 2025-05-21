@@ -8,6 +8,7 @@
 #include "io.h"
 #include "queue.h"
 #include "scheduler.h"
+#include "evaluate.h"
 
 Process processes[MAX_PROCESSES];
 Process current_processes[MAX_PROCESSES];

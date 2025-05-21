@@ -29,13 +29,14 @@ void run_fcfs(){
         }
 
         int waiting_size = waiting_queue.size;
+        int waiting_front = waiting_queue.front;
         for (int i = 0; i < waiting_size; i++) {
-            Process* waiting = waiting_queue.processes[waiting_queue.front];
+            Process* waiting = waiting_queue.processes[waiting_front+i];
             if (waiting->io[waiting->current_io].io_time == waiting->io[waiting->current_io].burst_time) {
                 waiting->io[waiting->current_io].completed = 1;
                 waiting->current_io = -1;
                 waiting->state = READY;
-                dequeue(&waiting_queue);
+                remove_process(&waiting_queue, waiting);
                 enqueue(&ready_queue, waiting);
             }
         }
@@ -76,6 +77,8 @@ void run_fcfs(){
         update_queues();
         current_time++;
     }
+    printf("%d\n", current_time);
+    printf("%d %d\n", ready_queue.size, waiting_queue.size);
 }
 
 void add_to_gantt(int pid, int start_time, int end_time){
@@ -113,11 +116,5 @@ void print_gantt(){
             printf("%-9d", gantt[i].start_time);
         }
     }
-    printf("fin\n");
-    printf("\n========================================\n");
-}
-
-void evaluate(){
-    print_gantt();
-    print_process_table();
+    printf("fin\n\n");
 }

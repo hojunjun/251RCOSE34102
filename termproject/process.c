@@ -31,8 +31,10 @@ void create_process(int pid, int arrival_time, int burst_time, int priority) {
     p->completion_time = 0;
     p->response_time = -1;
     p->state = READY;
-    p->io_count = rand() % MAX_IO + 1;
-    init_io(p->io, p->io_count, p->burst_time);
+    p->io_count = 2;
+    int request_times[2] = {2, 5};
+    int burst_times[2] = {1, 2};
+    create_io(p->io, p->io_count, request_times, burst_times);
     p->current_io = 0;
     p->cpu_time = 0;
 }
@@ -42,7 +44,30 @@ void create_random_process(int pid) {
     int burst_time = (rand() % (MAX_BURST_TIME - MIN_BURST_TIME)) + MIN_BURST_TIME;
     int priority = rand() % MAX_PRIORITY + 1;
     
-    create_process(pid, arrival_time, burst_time, priority);
+    if (num_processes >= MAX_PROCESSES) {
+        printf("Maximum number of processes reached\n");
+        return;
+    }
+
+    Process *p = &processes[num_processes];
+    if (pid == 0) {
+        p->pid = ++num_processes;
+    } else {
+        p->pid = pid;
+    }
+    p->arrival_time = arrival_time;
+    p->burst_time = burst_time;
+    p->remaining_time = burst_time;
+    p->priority = priority;
+    p->waiting_time = 0;
+    p->turnaround_time = 0;
+    p->completion_time = 0;
+    p->response_time = -1;
+    p->state = READY;
+    p->io_count = rand() % MAX_IO + 1;
+    create_random_io(p->io, p->io_count, p->burst_time);
+    p->current_io = 0;
+    p->cpu_time = 0;
 }
 
 void create_processes(int random, int num) {
@@ -79,9 +104,6 @@ void print_process_table() {
     printf("PID\tState\t\tArrival\tBurst\tPriority\tIO count\tCompletion\tTurnaround\tWaiting\t\tResponse\n");
     printf("--------------------------------------------------------------------------------------------------------------------------------------\n");
     
-    float avg_turnaround = 0, avg_waiting = 0, avg_response = 0;
-    int completed_count = 0;
-    
     for (int i = 0; i < num_processes; i++) {
         Process *p = &current_processes[i];
         char* state;
@@ -105,24 +127,8 @@ void print_process_table() {
         else {
             printf("%d\t%s\t%d\t%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n", p->pid, state, p->arrival_time, p->burst_time, p->priority, p->io_count, p->completion_time, p->turnaround_time, p->waiting_time, p->response_time);
         }
-        avg_turnaround += p->turnaround_time;
-        avg_waiting += p->waiting_time;
-        avg_response += p->response_time;
-
-        if (p->state == TERMINATED) {
-            completed_count++;
-        }
     }
     
-    if (completed_count > 0) {
-        avg_turnaround /= completed_count;
-        avg_waiting /= completed_count;
-        avg_response /= completed_count;
-        
-        printf("\nAverage Turnaround Time: %.2f\n", avg_turnaround);
-        printf("Average Waiting Time: %.2f\n", avg_waiting);
-        printf("Average Response Time: %.2f\n", avg_response);
-    }
-    printf("\n");
+    printf("\n\n");
 }
 
