@@ -2,6 +2,7 @@
 #include "process.h"
 #include "queue.h"
 #include <stdio.h>
+#include <assert.h>
 
 Process* current;
 int current_time;
@@ -137,6 +138,8 @@ void run_fcfs(){
         update_queues();
         current_time++;
     }
+
+    assert(completed_processes == num_processes);
 }
 
 void run_sjf(){
@@ -175,6 +178,8 @@ void run_sjf(){
         update_queues();
         current_time++;
     }
+
+    assert(completed_processes == num_processes);
 }
 
 void run_sjf_nonpreemptive(){
@@ -209,6 +214,8 @@ void run_sjf_nonpreemptive(){
         update_queues();
         current_time++;
     }
+
+    assert(completed_processes == num_processes);
 }
 
 void run_priority(){
@@ -247,6 +254,8 @@ void run_priority(){
         update_queues();
         current_time++;
     }
+
+    assert(completed_processes == num_processes);
 }
 
 void run_priority_nonpreemptive(){
@@ -280,6 +289,8 @@ void run_priority_nonpreemptive(){
         update_queues();
         current_time++;
     }
+
+    assert(completed_processes == num_processes);
 }
 
 void run_rr(){
@@ -316,4 +327,6 @@ void run_rr(){
         update_queues();
         current_time++;
     }
+
+    assert(completed_processes == num_processes);
 }
