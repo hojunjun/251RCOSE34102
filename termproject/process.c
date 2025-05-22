@@ -95,38 +95,3 @@ void print_process(Process *p){
     }
     printf("========================================\n");
 }
-
-void print_process_table() {
-    printf("\nProcess table\n");
-    printf("========================================\n");
-    printf("PID\tState\t\tArrival\tBurst\tPriority\tIO count\tCompletion\tTurnaround\tWaiting\t\tResponse\n");
-    printf("--------------------------------------------------------------------------------------------------------------------------------------\n");
-    
-    for (int i = 0; i < num_processes; i++) {
-        Process *p = &current_processes[i];
-        char* state;
-        switch (p->state) {
-            case READY:
-                state = "READY";
-                break;
-            case RUNNING:
-                state = "RUNNING";
-                break;
-            case WAITING:
-                state = "WAITING";
-                break;
-            case TERMINATED:
-                state = "TERMINATED";
-                break;
-        }
-        if (p->state != TERMINATED){
-            printf("%d\t%s\t\t%d\t%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n", p->pid, state, p->arrival_time, p->burst_time, p->priority, p->io_count, p->completion_time, p->turnaround_time, p->waiting_time, p->response_time);
-        }
-        else {
-            printf("%d\t%s\t%d\t%d\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n", p->pid, state, p->arrival_time, p->burst_time, p->priority, p->io_count, p->completion_time, p->turnaround_time, p->waiting_time, p->response_time);
-        }
-    }
-    
-    printf("\n\n");
-}
-

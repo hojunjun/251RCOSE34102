@@ -3,8 +3,16 @@
 #include "queue.h"
 #include <stdio.h>
 
+Process* current;
+int current_time;
+int current_start;
+int current_pid;
+
 
 void init_scheduler() {
+    init_processes();
+    init_queues();
+
     num_gantt_items = 0;
     completed_processes = 0;
     for (int i = 0; i < MAX_TIME; i++) {
@@ -12,13 +20,44 @@ void init_scheduler() {
         gantt[i].start_time = 0;
         gantt[i].end_time = 0;
     }
+
+    current = NULL;
+    current_time = 0;
+    current_start = 0;
+    current_pid = -1;
 }
 
+void terminate_process(){
+    current->state = TERMINATED;
+    current->completion_time = current_time;
+    current->turnaround_time = current->completion_time - current->arrival_time;
+    current_pid = -1;
+    add_to_gantt(current->pid, current_start, current_time);
+    completed_processes++;
+}
+
+void add_to_gantt(int pid, int start_time, int end_time){
+    gantt[num_gantt_items].pid = pid;
+    gantt[num_gantt_items].start_time = start_time;
+    gantt[num_gantt_items].end_time = end_time;
+    num_gantt_items++;
+}
+
+void update_queues() {
+    for (int i = 0; i < ready_queue.size; i++) {
+        int index = (ready_queue.front + i) % MAX_QUEUE_SIZE;
+        ready_queue.processes[index]->waiting_time++;
+    }
+    for (int i = 0; i < waiting_queue.size; i++){
+        int index = (waiting_queue.front + i) % MAX_QUEUE_SIZE;
+        waiting_queue.processes[index]->io[waiting_queue.processes[index]->current_io].io_time++;
+    }
+} 
+
+
 void run_fcfs(){
-    Process* current = NULL;
-    int current_time = 0;
-    int current_start = 0;
-    int current_pid = -1;
+
+    init_scheduler();
 
     while(current_time < MAX_TIME && completed_processes != num_processes){
         if (current_pid > -1){
@@ -37,12 +76,7 @@ void run_fcfs(){
                 }
             }
             if (current->remaining_time==0){
-                current->state = TERMINATED;
-                current->completion_time = current_time;
-                current->turnaround_time = current->completion_time - current->arrival_time;
-                current_pid = -1;
-                add_to_gantt(current->pid, current_start, current_time);
-                completed_processes++;
+                terminate_process();
             }
         }
 
@@ -82,10 +116,8 @@ void run_fcfs(){
 }
 
 void run_sjf(){
-    Process* current = NULL;
-    int current_time = 0;
-    int current_start = 0;
-    int current_pid = -1;
+
+    init_scheduler();
 
     while(current_time < MAX_TIME && completed_processes != num_processes){
         if (current_pid > -1){
@@ -104,12 +136,7 @@ void run_sjf(){
                 }
             }
             if (current->remaining_time==0){
-                current->state = TERMINATED;
-                current->completion_time = current_time;
-                current->turnaround_time = current->completion_time - current->arrival_time;
-                current_pid = -1;
-                add_to_gantt(current->pid, current_start, current_time);
-                completed_processes++;
+                terminate_process();
             }
         }
 
@@ -163,10 +190,8 @@ void run_sjf(){
 }
 
 void run_sjf_nonpreemptive(){
-    Process* current = NULL;
-    int current_time = 0;
-    int current_start = 0;
-    int current_pid = -1;
+
+    init_scheduler();
     
     while(current_time < MAX_TIME && completed_processes != num_processes){
         if (current_pid > -1){
@@ -185,12 +210,7 @@ void run_sjf_nonpreemptive(){
                 }
             }
             if (current->remaining_time==0){
-                current->state = TERMINATED;
-                current->completion_time = current_time;
-                current->turnaround_time = current->completion_time - current->arrival_time;
-                current_pid = -1;
-                add_to_gantt(current->pid, current_start, current_time);
-                completed_processes++;
+                terminate_process();
             }
         }
 
@@ -227,42 +247,4 @@ void run_sjf_nonpreemptive(){
         update_queues();
         current_time++;
     }
-}
-
-void add_to_gantt(int pid, int start_time, int end_time){
-    gantt[num_gantt_items].pid = pid;
-    gantt[num_gantt_items].start_time = start_time;
-    gantt[num_gantt_items].end_time = end_time;
-    num_gantt_items++;
-}
-
-void print_gantt(){
-    printf("\nGantt chart\n");
-    printf("========================================\n\n");
-    if (gantt[0].start_time != 0){
-        printf("|  idle  |");
-    } else {
-        printf("|");
-    }
-    for (int i = 0; i < num_gantt_items ; i++){
-        printf("   P%-3d |", gantt[i].pid);
-        if(gantt[i].end_time != gantt[i+1].start_time){
-            printf("  idle  |");
-        }
-    }
-    if (gantt[0].start_time != 0){
-        printf("\n0\t ");
-    } else {
-        printf("\n");
-    }
-    for (int i = 0; i < num_gantt_items ; i++){
-        if(gantt[i].end_time != gantt[i+1].start_time){
-            printf("%-5d%5d", gantt[i].start_time, gantt[i].end_time);
-            printf("        ");
-        }
-        else {
-            printf("%-9d", gantt[i].start_time);
-        }
-    }
-    printf("fin\n\n");
 }

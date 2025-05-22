@@ -16,6 +16,8 @@ int get_min_turnaround_time();
 int get_min_response_time();
 int get_min_completion_time();
 
+void print_gantt();
+void print_process_table();
 void evaluate();
 
 #endif

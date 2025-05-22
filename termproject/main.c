@@ -19,16 +19,6 @@ Queue waiting_queue;
 GanttItem gantt[MAX_TIME];
 int num_gantt_items = 0;
 
-void init() {
-    init_scheduler();
-    init_processes();
-    init_queues();
-}
-
-void reset() {
-    init();
-}
-
 int main() {
     srand(time(NULL));
     int choice, number;
@@ -49,39 +39,33 @@ int main() {
         create_processes(1, number);
     }
 
-    init();
+    init_processes();
+
     for (int i = 0; i < num_processes; i++){
         print_process(&current_processes[i]);
     }
-    print_process_table();
 
     printf("Running FCFS\n");
-    reset();
     run_fcfs();
     evaluate();
 
     printf("Running SJF\n");
-    reset();
     run_sjf();
     evaluate();
 
     printf("Running SJF Non-Preemptive\n");
-    reset();
     run_sjf_nonpreemptive();
     evaluate();
 
     /* printf("Running Priority\n"); */
-    /* reset(); */
     /* run_priority(); */
     /* evaluate(); */
 
     /* printf("Running Priority Non-Preemptive\n"); */
-    /* reset(); */
     /* run_priority_nonpreemptive(); */
     /* evaluate(); */
     
     /* printf("Running RR\n"); */
-    /* reset(); */
     /* run_rr(); */
     /* evaluate(); */
 

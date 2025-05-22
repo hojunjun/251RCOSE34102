@@ -10,6 +10,5 @@ void create_random_process(int pid);
 void create_processes(int random, int num);
 
 void print_process(Process *p);
-void print_process_table();
 
 #endif

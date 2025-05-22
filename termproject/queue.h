@@ -15,6 +15,4 @@ void remove_process(Queue *q, Process *p);
 Process *get_shortest_job(Queue *q);
 Process *get_highest_priority(Queue *q);
 
-void update_queues();
-
 #endif

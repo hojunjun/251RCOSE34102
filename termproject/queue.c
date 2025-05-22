@@ -115,14 +115,3 @@ Process *get_highest_priority(Queue *q) {
     
     return highest;
 }
-
-void update_queues() {
-    for (int i = 0; i < ready_queue.size; i++) {
-        int index = (ready_queue.front + i) % MAX_QUEUE_SIZE;
-        ready_queue.processes[index]->waiting_time++;
-    }
-    for (int i = 0; i < waiting_queue.size; i++){
-        int index = (waiting_queue.front + i) % MAX_QUEUE_SIZE;
-        waiting_queue.processes[index]->io[waiting_queue.processes[index]->current_io].io_time++;
-    }
-} 
