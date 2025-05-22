@@ -49,7 +49,6 @@ void remove_process(Queue *q, Process *p){
     for (i = 0; i < q->size; i++){
         int idx = (q->front + i) % MAX_QUEUE_SIZE;
         if (q->processes[idx] == p){
-            // Shift remaining elements
             for (j = i; j < q->size - 1; j++){
                 int curr = (q->front + j) % MAX_QUEUE_SIZE;
                 int next = (q->front + j + 1) % MAX_QUEUE_SIZE;

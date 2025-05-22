@@ -57,17 +57,17 @@ int main(){
     run_sjf_nonpreemptive();
     evaluate();
 
-    /* printf("Running Priority\n"); */
-    /* run_priority(); */
-    /* evaluate(); */
+    printf("Running Priority\n");
+    run_priority();
+    evaluate();
 
-    /* printf("Running Priority Non-Preemptive\n"); */
-    /* run_priority_nonpreemptive(); */
-    /* evaluate(); */
+    printf("Running Priority Non-Preemptive\n");
+    run_priority_nonpreemptive();
+    evaluate();
     
     /* printf("Running RR\n"); */
     /* run_rr(); */
     /* evaluate(); */
 
-    /* return 0; */
+    return 0;
 }
