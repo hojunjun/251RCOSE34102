@@ -50,6 +50,7 @@ void check_io_complete(){
             waiting->current_io = -1;
             waiting->state = READY;
             remove_process(&waiting_queue, waiting);
+            waiting_front--;
             enqueue(&ready_queue, waiting);
         }
     }
