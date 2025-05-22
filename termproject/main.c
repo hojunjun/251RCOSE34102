@@ -65,9 +65,9 @@ int main(){
     run_priority_nonpreemptive();
     evaluate();
     
-    /* printf("Running RR\n"); */
-    /* run_rr(); */
-    /* evaluate(); */
+    printf("Running RR\n");
+    run_rr();
+    evaluate();
 
     return 0;
 }

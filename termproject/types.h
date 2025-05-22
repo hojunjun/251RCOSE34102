@@ -11,6 +11,7 @@
 #define MAX_IO 3
 #define MAX_IO_BURST_TIME 5
 #define MAX_TIME MAX_ARRIVAL_TIME + MAX_PROCESSES * (MAX_BURST_TIME + MAX_IO * MAX_IO_BURST_TIME)
+#define RR_TIME_QUANTUM 2
 
 typedef enum {
     READY,
