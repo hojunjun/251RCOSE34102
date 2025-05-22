@@ -240,8 +240,8 @@ Running RR
 Gantt chart
 ========================================
 
-|  idle  |   P1   |   P1   |  idle  |   P3   |   P3   |   P1   |   P1   |   P3   |   P1   |   P3   |   P4   |   P3   |   P1   |   P3   |   P1   |   P4   |   P3   |   P1   |  idle  |   P1   |   P2   |   P3   |   P1   |   P4   |   P3   |   P2   |   P4   |   P3   |  idle  |   P3   |   P4   |  idle  |   P4   |  idle  |
-0        15       17      18        19       21       22       24       26       28       30       32       34       36       38       40       42       44       45      47        45       47       49       51       52       54       56       58       59      61        59       61      63        61      63        fin
+|  idle  |   P1   |   P1   |  idle  |   P3   |   P3   |   P1   |   P1   |   P3   |   P1   |   P3   |   P4   |   P3   |   P1   |   P3   |   P1   |   P4   |   P3   |   P1   |  idle  |   P1   |   P2   |   P3   |   P1   |   P4   |   P3   |   P2   |   P4   |   P3   |  idle  |   P3   |   P4   |  idle  |
+0        15       17      18        19       21       22       24       26       28       30       32       34       36       38       40       42       44       45      47        45       47       49       51       52       54       56       58       59      61        59       61      63        fin
 
 
 Process table
@@ -424,15 +424,15 @@ Running RR
 Gantt chart
 ========================================
 
-|   P1   |   P1   |   P2   |   P1   |   P3   |   P2   |   P1   |   P3   |   P2   |   P1   |  idle  |   P1   |  idle  |
-0        2        4        6        8        10       12       14       15       16      18        16      18        fin
+|   P1   |   P1   |   P2   |   P1   |   P3   |   P2   |   P1   |   P3   |   P2   |   P1   |  idle  |
+0        2        4        6        8        10       12       14       15       16      18        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       RUNNING         0       10      2               0               18              18              8               0
+1       TERMINATED      0       10      2               0               18              18              8               0
 2       TERMINATED      2       5       3               0               16              14              9               2
 3       TERMINATED      4       3       1               0               15              11              8               4
 

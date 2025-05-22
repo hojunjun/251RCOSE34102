@@ -290,12 +290,12 @@ void run_rr(){
                 current->cpu_time++;
                 current->remaining_time--;
                 check_io_request();
-                if (current_pid > -1 && (current_time - current_start) == RR_TIME_QUANTUM){
-                    preempt_process();
-                }
             }
             if (current->remaining_time==0){
                 terminate_process();
+            }
+            if (current_pid > -1 && (current_time - current_start) == RR_TIME_QUANTUM){
+                preempt_process();
             }
         }
 
