@@ -24,27 +24,25 @@ int main(){
     int choice, number;
     printf("CPU Scheduling Simulator\n");
     printf("========================================\n");
-    printf("1. Random\n");
-    printf("2. File\n");
+    printf("1. Sample\n");
+    printf("2. Random\n");
+    printf("3. From file\n");
+    printf("4. Manual input\n");
     printf("========================================\n");
     printf("Enter your choice: ");
     scanf("%d", &choice);
-    printf("Enter number of processes: ");
-    scanf("%d", &number);
-
-
-    if (choice == 2){
-        create_processes(0, number);
-    } else{
-        create_processes(1, number);
-    }
+    
+    create_processes(choice);
 
     init_processes();
-
-    for (int i = 0; i < num_processes; i++){
-        print_process(&current_processes[i]);
+    
+    if (choice != 4){
+        for (int i = 0; i < num_processes; i++){
+            print_process(&current_processes[i]);
+        }
     }
-
+    print("\n\n");
+    
     printf("Running FCFS\n");
     run_fcfs();
     evaluate();
