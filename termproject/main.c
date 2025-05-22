@@ -19,7 +19,7 @@ Queue waiting_queue;
 GanttItem gantt[MAX_TIME];
 int num_gantt_items = 0;
 
-int main() {
+int main(){
     srand(time(NULL));
     int choice, number;
     printf("CPU Scheduling Simulator\n");
@@ -33,9 +33,9 @@ int main() {
     scanf("%d", &number);
 
 
-    if (choice == 2) {
+    if (choice == 2){
         create_processes(0, number);
-    } else {
+    } else{
         create_processes(1, number);
     }
 

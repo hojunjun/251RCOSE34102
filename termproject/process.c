@@ -3,23 +3,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void init_processes() {
-    for (int i = 0; i < num_processes; i++) {
+void init_processes(){
+    for (int i = 0; i < num_processes; i++){
         current_processes[i] = processes[i];
     }
     completed_processes = 0;
 }
 
-void create_process(int pid, int arrival_time, int burst_time, int priority) {
-    if (num_processes >= MAX_PROCESSES) {
+void create_process(int pid, int arrival_time, int burst_time, int priority){
+    if (num_processes >= MAX_PROCESSES){
         printf("Maximum number of processes reached\n");
         return;
     }
 
     Process *p = &processes[num_processes];
-    if (pid == 0) {
+    if (pid == 0){
         p->pid = ++num_processes;
-    } else {
+    } else{
         p->pid = pid;
     }
     p->arrival_time = arrival_time;
@@ -32,27 +32,27 @@ void create_process(int pid, int arrival_time, int burst_time, int priority) {
     p->response_time = -1;
     p->state = READY;
     p->io_count = 0;
-    //int request_times[2] = {2, 5};
-    //int burst_times[2] = {1, 2};
+    //int request_times[2] ={2, 5};
+    //int burst_times[2] ={1, 2};
     //create_io(p->io, p->io_count, request_times, burst_times);
     p->current_io = 0;
     p->cpu_time = 0;
 }
 
-void create_random_process(int pid) {
+void create_random_process(int pid){
     int arrival_time = rand() % MAX_ARRIVAL_TIME;
     int burst_time = (rand() % (MAX_BURST_TIME - MIN_BURST_TIME)) + MIN_BURST_TIME;
     int priority = rand() % MAX_PRIORITY + 1;
     
-    if (num_processes >= MAX_PROCESSES) {
+    if (num_processes >= MAX_PROCESSES){
         printf("Maximum number of processes reached\n");
         return;
     }
 
     Process *p = &processes[num_processes];
-    if (pid == 0) {
+    if (pid == 0){
         p->pid = ++num_processes;
-    } else {
+    } else{
         p->pid = pid;
     }
     p->arrival_time = arrival_time;
@@ -70,12 +70,12 @@ void create_random_process(int pid) {
     p->cpu_time = 0;
 }
 
-void create_processes(int random, int num) {
-    if (random) {
-        for (int i = 0; i < num; i++) {
+void create_processes(int random, int num){
+    if (random){
+        for (int i = 0; i < num; i++){
             create_random_process(0);
         }
-    } else {
+    } else{
         create_process(0, 0, 10, 2);
         create_process(0, 2, 5, 3);
         create_process(0, 4, 3, 1);

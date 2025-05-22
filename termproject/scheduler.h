@@ -5,7 +5,12 @@
 
 void init_scheduler();
 
-void terminate_processes();
+void check_io_request();
+void check_io_complete();
+void arrive_process(int i);
+void run_process();
+void terminate_process();
+void preempt_process();
 void add_to_gantt(int pid, int start_time, int end_time);
 void update_queues();
 
