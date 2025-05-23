@@ -12,6 +12,7 @@
 #define MAX_IO_BURST_TIME 5
 #define MAX_TIME MAX_ARRIVAL_TIME + MAX_PROCESSES * (MAX_BURST_TIME + MAX_IO * MAX_IO_BURST_TIME)
 #define RR_TIME_QUANTUM 2
+#define NUM_ALGORITHMS 6
 
 typedef enum {
     READY,
@@ -60,6 +61,26 @@ typedef struct {
     int end_time;
 } GanttItem;
 
+typedef struct {
+    char* algorithm;
+    float average_waiting_time;
+    float average_turnaround_time;
+    float average_response_time;
+    int max_completion_time;
+    float variance_waiting_time;
+    float cpu_utilization;
+    float throughput;
+    int idle_time;
+    int context_switch;
+
+    int shortest_waiting;
+    int shortest_turnaround;
+    int shortest_response;
+    int shortest_completion;
+    int smallest_variance;
+    int min_context_switch;
+} EvalItem;
+
 extern Process processes[MAX_PROCESSES];
 extern Process current_processes[MAX_PROCESSES];
 extern int num_processes;
@@ -68,5 +89,7 @@ extern Queue ready_queue;
 extern Queue waiting_queue;
 extern GanttItem gantt[MAX_TIME];
 extern int num_gantt_items;
+extern EvalItem evaluation[NUM_ALGORITHMS];
+extern int num_simulation;
 
 #endif

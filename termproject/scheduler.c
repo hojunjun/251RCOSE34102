@@ -140,6 +140,7 @@ void run_fcfs(){
     }
 
     assert(completed_processes == num_processes);
+    num_simulation++;
 }
 
 void run_sjf(){
@@ -180,6 +181,7 @@ void run_sjf(){
     }
 
     assert(completed_processes == num_processes);
+    num_simulation++;
 }
 
 void run_sjf_nonpreemptive(){
@@ -216,6 +218,7 @@ void run_sjf_nonpreemptive(){
     }
 
     assert(completed_processes == num_processes);
+    num_simulation++;
 }
 
 void run_priority(){
@@ -256,6 +259,7 @@ void run_priority(){
     }
 
     assert(completed_processes == num_processes);
+    num_simulation++;
 }
 
 void run_priority_nonpreemptive(){
@@ -291,6 +295,7 @@ void run_priority_nonpreemptive(){
     }
 
     assert(completed_processes == num_processes);
+    num_simulation++;
 }
 
 void run_rr(){
@@ -329,4 +334,5 @@ void run_rr(){
     }
 
     assert(completed_processes == num_processes);
+    num_simulation++;
 }

@@ -18,6 +18,8 @@ Queue ready_queue;
 Queue waiting_queue;
 GanttItem gantt[MAX_TIME];
 int num_gantt_items = 0;
+EvalItem evaluation[NUM_ALGORITHMS];
+int num_simulation = 0;
 
 int main(){
     srand(time(NULL));
@@ -45,27 +47,28 @@ int main(){
     
     printf("\nRunning FCFS\n");
     run_fcfs();
-    evaluate();
+    evaluate("FCFS");
 
     printf("\nRunning SJF\n");
     run_sjf();
-    evaluate();
+    evaluate("Preemptive SJF");
 
     printf("\nRunning SJF Non-Preemptive\n");
     run_sjf_nonpreemptive();
-    evaluate();
+    evaluate("Nonpreemptive SJF");
 
     printf("\nRunning Priority\n");
     run_priority();
-    evaluate();
+    evaluate("Preemptive Priority");
 
     printf("\nRunning Priority Non-Preemptive\n");
     run_priority_nonpreemptive();
-    evaluate();
+    evaluate("Nonpreemptive Priority");
     
     printf("\nRunning RR\n");
     run_rr();
-    evaluate();
+    evaluate("RR");
 
+    compare();
     return 0;
 }
