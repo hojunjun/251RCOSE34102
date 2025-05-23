@@ -11,6 +11,7 @@ $ ./main
 - process
     - create hard coded processes
     - create random processes
+    - create process from files
     - create process from input
 - queue
     - basic queue implementation
@@ -19,6 +20,7 @@ $ ./main
 - io
     - create hard coded io
     - create random io
+    - create io from files
     - create io from input
 - scheduler
     - fcfs
@@ -36,10 +38,6 @@ $ ./main
     - print process table
 
 ## Todo
-- process
-    - create process from files
-- io
-    - create io from files
 - scheduler
     - more algorithms
 - evaluation
@@ -80,6 +78,9 @@ Burst Time: 3
 Priority: 1
 IO Count: 0
 ========================================
+
+
+
 Running FCFS
 
 Gantt chart
@@ -104,6 +105,7 @@ Average response time: 6.33     Max: 11, Min: 0
 Average completion time: 14.33  Max: 18, Min:10
 
 ========================================
+
 
 Running SJF
 
@@ -130,6 +132,7 @@ Average completion time: 11.67  Max: 18, Min: 7
 
 ========================================
 
+
 Running SJF Non-Preemptive
 
 Gantt chart
@@ -154,6 +157,7 @@ Average response time: 5.67     Max: 11, Min: 0
 Average completion time: 13.67  Max: 18, Min:10
 
 ========================================
+
 
 Running Priority
 
@@ -180,6 +184,7 @@ Average completion time: 12.67  Max: 18, Min: 7
 
 ========================================
 
+
 Running Priority Non-Preemptive
 
 Gantt chart
@@ -204,6 +209,7 @@ Average response time: 5.67     Max: 11, Min: 0
 Average completion time: 13.67  Max: 18, Min:10
 
 ========================================
+
 
 Running RR
 
@@ -244,222 +250,230 @@ Enter number of processes: 5
 
 ========================================
 Process 1
-Arrival Time: 48
-Burst Time: 17
-Priority: 5
-IO Count: 2
-IO 0 Request Time: 3
+Arrival Time: 24
+Burst Time: 8
+Priority: 2
+IO Count: 1
+IO 0 Request Time: 1
 IO 0 Burst Time: 2
-IO 1 Request Time: 12
-IO 1 Burst Time: 3
 ========================================
 
 ========================================
 Process 2
-Arrival Time: 18
-Burst Time: 13
-Priority: 5
+Arrival Time: 26
+Burst Time: 17
+Priority: 1
 IO Count: 2
-IO 0 Request Time: 3
-IO 0 Burst Time: 1
-IO 1 Request Time: 7
-IO 1 Burst Time: 5
-========================================
-
-========================================
-Process 3
-Arrival Time: 15
-Burst Time: 7
-Priority: 7
-IO Count: 2
-IO 0 Request Time: 2
-IO 0 Burst Time: 2
-IO 1 Request Time: 4
-IO 1 Burst Time: 3
-========================================
-
-========================================
-Process 4
-Arrival Time: 21
-Burst Time: 15
-Priority: 7
-IO Count: 2
-IO 0 Request Time: 6
-IO 0 Burst Time: 2
-IO 1 Request Time: 10
+IO 0 Request Time: 7
+IO 0 Burst Time: 4
+IO 1 Request Time: 13
 IO 1 Burst Time: 4
 ========================================
 
 ========================================
-Process 5
-Arrival Time: 29
-Burst Time: 19
-Priority: 2
+Process 3
+Arrival Time: 41
+Burst Time: 16
+Priority: 10
+IO Count: 3
+IO 0 Request Time: 4
+IO 0 Burst Time: 2
+IO 1 Request Time: 5
+IO 1 Burst Time: 3
+IO 2 Request Time: 11
+IO 2 Burst Time: 2
+========================================
+
+========================================
+Process 4
+Arrival Time: 10
+Burst Time: 17
+Priority: 9
 IO Count: 2
-IO 0 Request Time: 1
-IO 0 Burst Time: 4
-IO 1 Request Time: 10
+IO 0 Request Time: 7
+IO 0 Burst Time: 3
+IO 1 Request Time: 8
+IO 1 Burst Time: 3
+========================================
+
+========================================
+Process 5
+Arrival Time: 7
+Burst Time: 9
+Priority: 6
+IO Count: 2
+IO 0 Request Time: 2
+IO 0 Burst Time: 2
+IO 1 Request Time: 6
 IO 1 Burst Time: 2
 ========================================
+
+
+
 Running FCFS
 
 Gantt chart
 ========================================
 
-|  idle  |   P3   |  idle  |   P2   |   P3   |   P4   |   P2   |   P3   |   P5   |   P4   |   P2   |   P5   |   P4   |   P1   |   P5   |   P1   |  idle  |   P1   |  idle  |
-0        15      17        18       21       23       29       33       36       37       41       47       56       61       64       73      82        85      90        fin
+|  idle  |   P5   |  idle  |   P4   |   P5   |   P4   |  idle  |   P5   |   P1   |   P4   |   P2   |   P1   |   P3   |   P2   |   P3   |  idle  |   P2   |   P3   |  idle  |   P3   |  idle  |
+0        7        9        10       17       21      22        23       26       27       36       43       50       54       60      61        64       68      74        76      81        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      48      17      5               2               90              42              20              13
-2       TERMINATED      18      13      5               2               47              29              10              0
-3       TERMINATED      15      7       7               2               36              21              9               0
-4       TERMINATED      21      15      7               2               61              40              19              2
-5       TERMINATED      29      19      2               2               73              44              19              7
+1       TERMINATED      24      8       2               1               50              26              16              2
+2       TERMINATED      26      17      1               2               68              42              17              10
+3       TERMINATED      41      16      10              3               81              40              17              9
+4       TERMINATED      10      17      9               2               36              26              3               0
+5       TERMINATED      7       9       6               2               26              19              6               0
 
 
-Average waiting time: 15.40     Max: 20, Min: 9
-Average turnaround time: 35.20  Max: 44, Min:21
-Average response time: 4.40     Max: 13, Min: 0
-Average completion time: 61.40  Max: 90, Min:36
+Average waiting time: 11.80     Max: 17, Min: 3
+Average turnaround time: 30.60  Max: 42, Min:19
+Average response time: 4.20     Max: 10, Min: 0
+Average completion time: 52.20  Max: 81, Min:26
 
 ========================================
+
 
 Running SJF
 
 Gantt chart
 ========================================
 
-|  idle  |   P3   |  idle  |   P2   |   P3   |   P2   |   P3   |   P4   |   P2   |   P4   |   P5   |  idle  |   P1   |   P4   |   P1   |   P5   |   P1   |   P5   |  idle  |
-0        15      17        18       21       23       27       30       36       42       46      47        48       51       56       65       74       79      88        fin
+|  idle  |   P5   |  idle  |   P4   |   P5   |   P4   |  idle  |   P5   |   P1   |   P4   |   P1   |   P3   |   P2   |   P3   |  idle  |   P2   |   P3   |   P2   |   P3   |  idle  |
+0        7        9        10       17       21      22        23       26       27       36       43       47       54      55        58       64       70       74      79        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      48      17      5               2               79              31              9               0
-2       TERMINATED      18      13      5               2               42              24              5               0
-3       TERMINATED      15      7       7               2               30              15              3               0
-4       TERMINATED      21      15      7               2               56              35              14              9
-5       TERMINATED      29      19      2               2               88              59              34              17
+1       TERMINATED      24      8       2               1               43              19              9               2
+2       TERMINATED      26      17      1               2               74              48              23              21
+3       TERMINATED      41      16      10              3               79              38              15              2
+4       TERMINATED      10      17      9               2               36              26              3               0
+5       TERMINATED      7       9       6               2               26              19              6               0
 
 
-Average waiting time: 13.00     Max: 34, Min: 3
-Average turnaround time: 32.80  Max: 59, Min:15
-Average response time: 5.20     Max: 17, Min: 0
-Average completion time: 59.00  Max: 88, Min:30
+Average waiting time: 11.20     Max: 23, Min: 3
+Average turnaround time: 30.00  Max: 48, Min:19
+Average response time: 5.00     Max: 21, Min: 0
+Average completion time: 51.60  Max: 79, Min:26
 
 ========================================
+
 
 Running SJF Non-Preemptive
 
 Gantt chart
 ========================================
 
-|  idle  |   P3   |  idle  |   P2   |   P3   |   P2   |   P3   |   P4   |   P2   |   P4   |   P5   |  idle  |   P1   |   P4   |   P1   |   P5   |   P1   |   P5   |  idle  |
-0        15      17        18       21       23       27       30       36       42       46      47        48       51       56       65       74       79      88        fin
+|  idle  |   P5   |  idle  |   P4   |   P5   |   P4   |  idle  |   P5   |   P1   |   P4   |   P1   |   P3   |   P2   |   P3   |  idle  |   P2   |   P3   |   P2   |   P3   |  idle  |
+0        7        9        10       17       21      22        23       26       27       36       43       47       54      55        58       64       70       74      79        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      48      17      5               2               79              31              9               0
-2       TERMINATED      18      13      5               2               42              24              5               0
-3       TERMINATED      15      7       7               2               30              15              3               0
-4       TERMINATED      21      15      7               2               56              35              14              9
-5       TERMINATED      29      19      2               2               88              59              34              17
+1       TERMINATED      24      8       2               1               43              19              9               2
+2       TERMINATED      26      17      1               2               74              48              23              21
+3       TERMINATED      41      16      10              3               79              38              15              2
+4       TERMINATED      10      17      9               2               36              26              3               0
+5       TERMINATED      7       9       6               2               26              19              6               0
 
 
-Average waiting time: 13.00     Max: 34, Min: 3
-Average turnaround time: 32.80  Max: 59, Min:15
-Average response time: 5.20     Max: 17, Min: 0
-Average completion time: 59.00  Max: 88, Min:30
+Average waiting time: 11.20     Max: 23, Min: 3
+Average turnaround time: 30.00  Max: 48, Min:19
+Average response time: 5.00     Max: 21, Min: 0
+Average completion time: 51.60  Max: 79, Min:26
 
 ========================================
+
 
 Running Priority
 
 Gantt chart
 ========================================
 
-|  idle  |   P3   |  idle  |   P2   |   P3   |   P2   |   P4   |   P5   |   P3   |   P2   |   P5   |   P1   |   P5   |   P1   |   P4   |   P1   |   P4   |  idle  |   P4   |  idle  |
-0        15      17        18       21       23       27       29       30       33       39       48       51       60       69       73       78      82        86      91        fin
+|  idle  |   P5   |  idle  |   P4   |   P5   |   P4   |  idle  |   P5   |   P1   |   P5   |   P2   |   P1   |   P2   |   P5   |   P4   |   P2   |   P3   |  idle  |   P3   |  idle  |   P3   |  idle  |   P3   |  idle  |
+0        7        9        10       17       21      22        23       24       25       26       33       40       46       47       56       60      64        66      67        70      76        78      83        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      48      17      5               2               78              30              8               0
-2       TERMINATED      18      13      5               2               39              21              2               0
-3       TERMINATED      15      7       7               2               33              18              6               0
-4       TERMINATED      21      15      7               2               91              70              49              6
-5       TERMINATED      29      19      2               2               60              31              6               0
+1       TERMINATED      24      8       2               1               40              16              6               0
+2       TERMINATED      26      17      1               2               60              34              9               0
+3       TERMINATED      41      16      10              3               83              42              19              19
+4       TERMINATED      10      17      9               2               56              46              23              0
+5       TERMINATED      7       9       6               2               47              40              27              0
 
 
-Average waiting time: 14.20     Max: 49, Min: 2
-Average turnaround time: 34.00  Max: 70, Min:18
-Average response time: 1.20     Max:  6, Min: 0
-Average completion time: 60.20  Max: 91, Min:33
+Average waiting time: 16.80     Max: 27, Min: 6
+Average turnaround time: 35.60  Max: 46, Min:16
+Average response time: 3.80     Max: 19, Min: 0
+Average completion time: 57.20  Max: 83, Min:40
 
 ========================================
+
 
 Running Priority Non-Preemptive
 
 Gantt chart
 ========================================
 
-|  idle  |   P3   |  idle  |   P2   |   P3   |   P2   |   P4   |   P5   |   P2   |   P5   |   P1   |   P5   |   P1   |   P3   |   P1   |   P4   |  idle  |   P4   |  idle  |
-0        15      17        18       21       23       27       33       34       40       49       52       61       70       73       78      82        86      91        fin
+|  idle  |   P5   |  idle  |   P4   |   P5   |   P4   |  idle  |   P5   |   P2   |   P1   |   P4   |   P2   |   P1   |   P2   |   P3   |  idle  |   P3   |  idle  |   P3   |  idle  |   P3   |  idle  |
+0        7        9        10       17       21      22        23       26       33       34       43       49       56       60      64        66      67        70      76        78      83        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      48      17      5               2               78              30              8               1
-2       TERMINATED      18      13      5               2               40              22              3               0
-3       TERMINATED      15      7       7               2               73              58              46              0
-4       TERMINATED      21      15      7               2               91              70              49              6
-5       TERMINATED      29      19      2               2               61              32              7               4
+1       TERMINATED      24      8       2               1               56              32              22              9
+2       TERMINATED      26      17      1               2               60              34              9               0
+3       TERMINATED      41      16      10              3               83              42              19              19
+4       TERMINATED      10      17      9               2               43              33              10              0
+5       TERMINATED      7       9       6               2               26              19              6               0
 
 
-Average waiting time: 22.60     Max: 49, Min: 3
-Average turnaround time: 42.40  Max: 70, Min:22
-Average response time: 2.20     Max:  6, Min: 0
-Average completion time: 68.60  Max: 91, Min:40
+Average waiting time: 13.20     Max: 22, Min: 6
+Average turnaround time: 32.00  Max: 42, Min:19
+Average response time: 5.60     Max: 19, Min: 0
+Average completion time: 53.60  Max: 83, Min:26
 
 ========================================
+
 
 Running RR
 
 Gantt chart
 ========================================
 
-|  idle  |   P3   |  idle  |   P2   |   P3   |   P2   |   P4   |   P2   |   P4   |   P3   |   P2   |   P4   |   P5   |   P3   |   P4   |   P2   |   P4   |   P5   |   P2   |   P5   |   P2   |   P4   |   P1   |   P5   |   P4   |   P1   |   P5   |   P4   |   P5   |   P1   |   P1   |   P5   |   P1   |   P5   |   P1   |   P5   |   P1   |   P5   |   P5   |   P1   |   P1   |   P1   |  idle  |
-0        15      17        18       20       22       23       25       27       29       31       33       35       36       37       39       41       43       45       47       49       51       53       55       57       59       60       62       63       64       66       68       70       72       74       76       78       79       81       82       84       86      87        fin
+|  idle  |   P5   |  idle  |   P4   |   P5   |   P4   |   P5   |   P4   |   P4   |   P5   |   P5   |   P1   |   P4   |   P2   |   P1   |   P2   |   P4   |   P1   |   P2   |   P4   |   P1   |   P2   |   P4   |   P3   |   P1   |   P4   |   P3   |   P2   |   P4   |   P2   |   P3   |   P2   |  idle  |   P3   |   P3   |   P2   |   P3   |   P2   |   P3   |   P3   |   P3   |  idle  |
+0        7        9        10       12       14       16       18       20       21       23       24       25       26       28       30       32       34       36       38       40       42       43       45       47       48       50       52       54       55       57       58      60        61       63       65       67       69       71       73       75      76        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      48      17      5               2               87              39              17              5
-2       TERMINATED      18      13      5               2               51              33              14              0
-3       TERMINATED      15      7       7               2               37              22              10              0
-4       TERMINATED      21      15      7               2               63              42              21              2
-5       TERMINATED      29      19      2               2               82              53              28              6
+1       TERMINATED      24      8       2               1               48              24              14              0
+2       TERMINATED      26      17      1               2               71              45              20              0
+3       TERMINATED      41      16      10              3               76              35              12              4
+4       TERMINATED      10      17      9               2               55              45              22              0
+5       TERMINATED      7       9       6               2               24              17              4               0
 
 
-Average waiting time: 18.00     Max: 28, Min:10
-Average turnaround time: 37.80  Max: 53, Min:22
-Average response time: 2.60     Max:  6, Min: 0
-Average completion time: 64.00  Max: 87, Min:37
+Average waiting time: 14.40     Max: 22, Min: 4
+Average turnaround time: 33.20  Max: 45, Min:17
+Average response time: 0.80     Max:  4, Min: 0
+Average completion time: 54.80  Max: 76, Min:24
 
 ========================================
 ```
@@ -472,7 +486,7 @@ CPU Scheduling Simulator
 3. From file
 4. Manual input
 ========================================
-Enter your choice: 4
+Enter your choice: 3
 Enter number of processes: 4
 
 ========================================
@@ -524,159 +538,167 @@ IO 1 Burst Time: 4
 IO 2 Request Time: 7
 IO 2 Burst Time: 1
 ========================================
+
+
+
 Running FCFS
 
 Gantt chart
 ========================================
 
-|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P4   |   P1   |   P3   |   P2   |  idle  |   P2   |  idle  |   P2   |  idle  |
-0        15      18        19       22       28       37       46       52       58      60        62      64        69      72        fin
+|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P4   |   P1   |   P3   |   P4   |   P2   |  idle  |   P4   |   P2   |   P4   |  idle  |   P2   |  idle  |
+0        15      18        19       22       28       37       39       45       51       53      55        57       60       62      64        67      70        fin
 
 
 Process table
 ========================================
-PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      15      15      9               2               52              37              14              0
-2       TERMINATED      46      7       8               2               72              26              12              12
-3       TERMINATED      19      18      9               2               58              39              18              0
-4       TERMINATED      30      9       10              3               46              16              7               7
+1       TERMINATED      15      15      9               2               45              30              7              0
+2       TERMINATED      46      7       8               2               70              24              10             7
+3       TERMINATED      19      18      9               2               51              32              11             0
+4       TERMINATED      30      9       10              3               64              34              15             7
 
 
-Average waiting time: 12.75     Max: 18, Min: 7
-Average turnaround time: 29.50  Max: 39, Min:16
-Average response time: 4.75     Max: 12, Min: 0
-Average completion time: 57.00  Max: 72, Min:46
+Average waiting time: 10.75     Max: 15, Min: 7
+Average turnaround time: 30.00  Max: 34, Min:24
+Average response time: 3.50     Max:  7, Min: 0
+Average completion time: 57.50  Max: 70, Min:45
 
 ========================================
+
 
 Running SJF
 
 Gantt chart
 ========================================
 
-|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P4   |   P1   |   P3   |   P2   |   P3   |   P2   |   P3   |   P2   |  idle  |
-0        15      18        19       22       28       30       39       45       46       48       54       56       62      65        fin
+|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P4   |   P3   |   P1   |   P3   |   P4   |   P2   |  idle  |   P4   |   P2   |   P4   |  idle  |   P2   |  idle  |
+0        15      18        19       22       28       30       32       39       45       51       53      55        57       60       62      64        67      70        fin
 
 
 Process table
 ========================================
-PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      15      15      9               2               45              30              7               0
-2       TERMINATED      46      7       8               2               65              19              5               0
-3       TERMINATED      19      18      9               2               62              43              22              0
-4       TERMINATED      30      9       10              3               39              9               0               0
+1       TERMINATED      15      15      9               2               45              30              7              0
+2       TERMINATED      46      7       8               2               70              24              10             7
+3       TERMINATED      19      18      9               2               51              32              11             0
+4       TERMINATED      30      9       10              3               64              34              15             0
 
 
-Average waiting time: 8.50      Max: 22, Min: 0
-Average turnaround time: 25.25  Max: 43, Min: 9
-Average response time: 0.00     Max:  0, Min: 0
-Average completion time: 52.75  Max: 65, Min:39
+Average waiting time: 10.75     Max: 15, Min: 7
+Average turnaround time: 30.00  Max: 34, Min:24
+Average response time: 1.75     Max:  7, Min: 0
+Average completion time: 57.50  Max: 70, Min:45
 
 ========================================
+
 
 Running SJF Non-Preemptive
 
 Gantt chart
 ========================================
 
-|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P1   |   P3   |   P2   |   P4   |   P2   |  idle  |   P2   |  idle  |
-0        15      18        19       22       28       37       43       49       51       60      62        67      70        fin
+|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P1   |   P3   |   P2   |   P4   |   P2   |  idle  |   P4   |   P2   |  idle  |   P4   |  idle  |   P4   |  idle  |
+0        15      18        19       22       28       37       43       49       51       53      55        58       60      63        64      67        68      70        fin
 
 
 Process table
 ========================================
-PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      15      15      9               2               43              28              5               0
-2       TERMINATED      46      7       8               2               70              24              10              3
-3       TERMINATED      19      18      9               2               49              30              9               0
-4       TERMINATED      30      9       10              3               60              30              21              21
+1       TERMINATED      15      15      9               2               43              28              5              0
+2       TERMINATED      46      7       8               2               63              17              3              3
+3       TERMINATED      19      18      9               2               49              30              9              0
+4       TERMINATED      30      9       10              3               70              40              21             21
 
 
-Average waiting time: 11.25     Max: 21, Min: 5
-Average turnaround time: 28.00  Max: 30, Min:24
+Average waiting time: 9.50      Max: 21, Min: 3
+Average turnaround time: 28.75  Max: 40, Min:17
 Average response time: 6.00     Max: 21, Min: 0
-Average completion time: 55.50  Max: 70, Min:43
+Average completion time: 56.25  Max: 70, Min:43
 
 ========================================
+
 
 Running Priority
 
 Gantt chart
 ========================================
 
-|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P1   |   P3   |   P2   |   P3   |   P2   |   P4   |   P2   |  idle  |
-0        15      18        19       22       28       37       43       46       48       51       53       62      65        fin
+|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P1   |   P3   |   P2   |   P3   |   P2   |   P4   |  idle  |   P2   |   P4   |  idle  |   P4   |  idle  |   P4   |  idle  |
+0        15      18        19       22       28       37       43       46       48       51       53      55        58       61      63        67      70        71      73        fin
 
 
 Process table
 ========================================
-PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      15      15      9               2               43              28              5               0
-2       TERMINATED      46      7       8               2               65              19              5               0
-3       TERMINATED      19      18      9               2               51              32              11              0
-4       TERMINATED      30      9       10              3               62              32              23              23
+1       TERMINATED      15      15      9               2               43              28              5              0
+2       TERMINATED      46      7       8               2               61              15              1              0
+3       TERMINATED      19      18      9               2               51              32              11             0
+4       TERMINATED      30      9       10              3               73              43              24             23
 
 
-Average waiting time: 11.00     Max: 23, Min: 5
-Average turnaround time: 27.75  Max: 32, Min:19
+Average waiting time: 10.25     Max: 24, Min: 1
+Average turnaround time: 29.50  Max: 43, Min:15
 Average response time: 5.75     Max: 23, Min: 0
-Average completion time: 55.25  Max: 65, Min:43
+Average completion time: 57.00  Max: 73, Min:43
 
 ========================================
+
 
 Running Priority Non-Preemptive
 
 Gantt chart
 ========================================
 
-|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P1   |   P3   |   P2   |   P4   |   P2   |  idle  |   P2   |  idle  |
-0        15      18        19       22       28       37       43       49       51       60      62        67      70        fin
+|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P1   |   P3   |   P2   |   P4   |   P2   |  idle  |   P4   |   P2   |  idle  |   P4   |  idle  |   P4   |  idle  |
+0        15      18        19       22       28       37       43       49       51       53      55        58       60      63        64      67        68      70        fin
 
 
 Process table
 ========================================
-PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      15      15      9               2               43              28              5               0
-2       TERMINATED      46      7       8               2               70              24              10              3
-3       TERMINATED      19      18      9               2               49              30              9               0
-4       TERMINATED      30      9       10              3               60              30              21              21
+1       TERMINATED      15      15      9               2               43              28              5              0
+2       TERMINATED      46      7       8               2               63              17              3              3
+3       TERMINATED      19      18      9               2               49              30              9              0
+4       TERMINATED      30      9       10              3               70              40              21             21
 
 
-Average waiting time: 11.25     Max: 21, Min: 5
-Average turnaround time: 28.00  Max: 30, Min:24
+Average waiting time: 9.50      Max: 21, Min: 3
+Average turnaround time: 28.75  Max: 40, Min:17
 Average response time: 6.00     Max: 21, Min: 0
-Average completion time: 55.50  Max: 70, Min:43
+Average completion time: 56.25  Max: 70, Min:43
 
 ========================================
+
 
 Running RR
 
 Gantt chart
 ========================================
 
-|  idle  |   P1   |   P1   |  idle  |   P3   |   P3   |   P1   |   P1   |   P3   |   P1   |   P3   |   P4   |   P3   |   P4   |   P1   |   P3   |   P4   |   P1   |   P3   |   P4   |   P1   |   P2   |   P3   |   P4   |   P3   |   P2   |   P3   |  idle  |   P2   |   P2   |  idle  |
-0        15       17      18        19       21       22       24       26       28       30       32       34       36       38       40       42       44       46       47       49       51       53       55       56       58       60      62        65       67      68        fin
+|  idle  |   P1   |   P1   |  idle  |   P3   |   P3   |   P1   |   P1   |   P3   |   P1   |   P3   |   P4   |   P3   |   P1   |   P3   |   P1   |   P4   |   P3   |   P1   |   P2   |   P3   |   P4   |   P3   |   P2   |   P4   |   P3   |   P4   |   P2   |   P2   |  idle  |
+0        15       17      18        19       21       22       24       26       28       30       32       34       36       38       40       42       44       45       47       49       51       53       55       57       58       60       62       64      65        fin
 
 
 Process table
 ========================================
-PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting         Response
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      15      15      9               2               51              36              13              0
-2       TERMINATED      46      7       8               2               68              22              8               5
-3       TERMINATED      19      18      9               2               62              43              22              0
-4       TERMINATED      30      9       10              3               56              26              17              2
+1       TERMINATED      15      15      9               2               47              32              9              0
+2       TERMINATED      46      7       8               2               65              19              5              1
+3       TERMINATED      19      18      9               2               60              41              20             0
+4       TERMINATED      30      9       10              3               62              32              13             2
 
 
-Average waiting time: 15.00     Max: 22, Min: 8
-Average turnaround time: 31.75  Max: 43, Min:22
-Average response time: 1.75     Max:  5, Min: 0
-Average completion time: 59.25  Max: 68, Min:51
+Average waiting time: 11.75     Max: 20, Min: 5
+Average turnaround time: 31.00  Max: 41, Min:19
+Average response time: 0.75     Max:  2, Min: 0
+Average completion time: 58.50  Max: 65, Min:47
 
 ========================================
 ```

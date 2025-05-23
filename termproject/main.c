@@ -41,29 +41,29 @@ int main(){
             print_process(&current_processes[i]);
         }
     }
-    print("\n\n");
+    printf("\n\n");
     
-    printf("Running FCFS\n");
+    printf("\nRunning FCFS\n");
     run_fcfs();
     evaluate();
 
-    printf("Running SJF\n");
+    printf("\nRunning SJF\n");
     run_sjf();
     evaluate();
 
-    printf("Running SJF Non-Preemptive\n");
+    printf("\nRunning SJF Non-Preemptive\n");
     run_sjf_nonpreemptive();
     evaluate();
 
-    printf("Running Priority\n");
+    printf("\nRunning Priority\n");
     run_priority();
     evaluate();
 
-    printf("Running Priority Non-Preemptive\n");
+    printf("\nRunning Priority Non-Preemptive\n");
     run_priority_nonpreemptive();
     evaluate();
     
-    printf("Running RR\n");
+    printf("\nRunning RR\n");
     run_rr();
     evaluate();
 
