@@ -69,6 +69,14 @@ int main(){
     run_rr();
     evaluate("RR");
 
+    printf("\nRunning Aging Priority\n");
+    run_aging_priority();
+    evaluate("Aging Preemptive Priority");
+
+    printf("\nRunning Aging Priority Non-Preemptive\n");
+    run_aging_priority_nonpreemptive();
+    evaluate("Aging Nonpreemptive Priority");
+
     compare();
     return 0;
 }

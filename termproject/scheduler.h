@@ -20,5 +20,7 @@ void run_sjf_nonpreemptive();
 void run_priority();
 void run_priority_nonpreemptive();
 void run_rr();
+void run_aging_priority();
+void run_aging_priority_nonpreemptive();
 
 #endif

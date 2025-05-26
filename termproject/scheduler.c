@@ -336,3 +336,92 @@ void run_rr(){
     assert(completed_processes == num_processes);
     num_simulation++;
 }
+
+void run_aging_priority(){
+
+    init_scheduler();
+
+    while(current_time < MAX_TIME && completed_processes != num_processes){
+        if (current_pid > -1){
+            if (current->remaining_time > 0){
+                current->cpu_time++;
+                current->remaining_time--;
+                check_io_request();
+            }
+            if (current->remaining_time==0){
+                terminate_process();
+            }
+        }
+
+        for (int i = 0; i < num_processes; i++){
+            if (current_time==current_processes[i].arrival_time){
+                arrive_process(i);
+                
+                if (current_pid > -1 && current->priority > current_processes[i].priority){
+                    preempt_process();
+                }
+            }
+        }
+
+        check_io_complete();
+
+        if (ready_queue.size > 0 && current_pid == -1){
+            current = get_highest_priority(&ready_queue);
+            run_process();
+        }
+
+        update_queues();
+        for (int i = 0; i < ready_queue.size; i++){
+            int index = (ready_queue.front + i) % MAX_QUEUE_SIZE;
+            if (ready_queue.processes[index]->priority > 0 && ready_queue.processes[index]->waiting_time % AGING_TIME_QUANTUM == 0){
+                ready_queue.processes[index]->priority--;
+            }
+        }    
+        current_time++;
+    }
+
+    assert(completed_processes == num_processes);
+    num_simulation++;
+}
+
+void run_aging_priority_nonpreemptive(){
+    init_scheduler();
+    
+    while(current_time < MAX_TIME && completed_processes != num_processes){
+        if (current_pid > -1){
+            if (current->remaining_time > 0){
+                current->cpu_time++;
+                current->remaining_time--;
+                check_io_request();
+            }
+            if (current->remaining_time==0){
+                terminate_process();
+            }
+        }
+
+        for (int i = 0; i < num_processes; i++){
+            if (current_time==current_processes[i].arrival_time){
+                arrive_process(i);
+            }
+        }
+
+        check_io_complete();
+
+        if (ready_queue.size > 0 && current_pid == -1){
+            current = get_highest_priority(&ready_queue);
+            run_process();
+        }
+
+        update_queues();
+        for (int i = 0; i < ready_queue.size; i++){
+            int index = (ready_queue.front + i) % MAX_QUEUE_SIZE;
+            if (ready_queue.processes[index]->priority > 0 && ready_queue.processes[index]->waiting_time % AGING_TIME_QUANTUM == 0){
+                ready_queue.processes[index]->priority--;
+            }
+        }    
+        current_time++;
+    }
+
+    assert(completed_processes == num_processes);
+    num_simulation++;
+}
