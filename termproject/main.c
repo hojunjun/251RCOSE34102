@@ -85,6 +85,14 @@ int main(){
     run_hrrn_nonpreemptive();
     evaluate("Nonpreemptive HRRN");
 
+    printf("\nRunning CFS\n");
+    run_cfs();
+    evaluate("Preemptive CFS");
+
+    printf("\nRunning CFS Non-Preemptive\n");
+    run_cfs_nonpreemptive();
+    evaluate("Nonpreemptive CFS");
+
     compare();
     return 0;
 }

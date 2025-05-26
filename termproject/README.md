@@ -33,6 +33,8 @@ $ ./main
     - aging nonpreemptive priority
     - preemptive hrrn
     - nonpreemptive hrrn
+    - preemptive cfs
+    - nonpreemptive cfs
 - evaluation
     - average/max/min/variance waiting time
     - average/max/min/variance turnaround time
@@ -419,17 +421,84 @@ Context switch: 2 times
 ========================================
 
 
+Running CFS
+
+Gantt chart
+========================================
+
+|   P1   |   P2   |   P3   |   P2   |   P1   |   P2   |   P1   |  idle  |
+0        3        5        8        10       12       13      18        fin
+
+
+Process table
+========================================
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
+--------------------------------------------------------------------------------------------------------------------------------------
+1       TERMINATED      0       10      10              0               18              18              8              0
+2       TERMINATED      2       5       5               0               13              11              6              1
+3       TERMINATED      4       3       3               0               8               4               1              1
+
+
+Average waiting time: 5.00      Max:  8, Min: 1, Variance: 8.67
+Average turnaround time: 11.00  Max: 18, Min: 4, Variance: 32.67
+Average response time: 0.67     Max:  1, Min: 0, Variance: 0.22
+Average completion time: 13.00  Max: 18, Min: 8, Variance: 16.67
+CPU Utilization: 100.00%
+Throughput: 16.67 process per 100s
+CPU time: 18
+IO time: 0
+Idle time: 0
+Total time: 18
+Context switch: 6 times
+
+========================================
+
+
+Running CFS Non-Preemptive
+
+Gantt chart
+========================================
+
+|   P1   |   P2   |   P3   |  idle  |
+0        10       15      18        fin
+
+
+Process table
+========================================
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
+--------------------------------------------------------------------------------------------------------------------------------------
+1       TERMINATED      0       10      10              0               10              10              0              0
+2       TERMINATED      2       5       5               0               15              13              8              8
+3       TERMINATED      4       3       3               0               18              14              11             11
+
+
+Average waiting time: 6.33      Max: 11, Min: 0, Variance: 21.56
+Average turnaround time: 12.33  Max: 14, Min:10, Variance: 2.89
+Average response time: 6.33     Max: 11, Min: 0, Variance: 21.56
+Average completion time: 14.33  Max: 18, Min:10, Variance: 10.89
+CPU Utilization: 100.00%
+Throughput: 16.67 process per 100s
+CPU time: 18
+IO time: 0
+Idle time: 0
+Total time: 18
+Context switch: 2 times
+
+========================================
+
+
 
 Comparation
 ========================================
 Preemptive SJF has shortest average waiting time: 3.67
-34% shorter than average (5.57)
+34% shorter than average (5.58)
 
 Preemptive SJF has shortest average turnaround time: 9.67
-16% shorter than average (11.57)
+17% shorter than average (11.58)
 
 Preemptive HRRN has shortest average response time: 0.67
-82% shorter than average (3.80)
+Preemptive CFS has shortest average response time: 0.67
+82% shorter than average (3.75)
 
 FCFS has shortest max completion time: 18
 Preemptive SJF has shortest max completion time: 18
@@ -441,10 +510,12 @@ Aging Preemptive Priority has shortest max completion time: 18
 Aging Nonpreemptive Priority has shortest max completion time: 18
 Preemptive HRRN has shortest max completion time: 18
 Nonpreemptive HRRN has shortest max completion time: 18
+Preemptive CFS has shortest max completion time: 18
+Nonpreemptive CFS has shortest max completion time: 18
 All algorithms have same max completion time
 
 RR has smallest variance of waiting time: 0.22
-99% smaller than average (16.16)
+99% smaller than average (15.98)
 
 FCFS has highest cpu utilization: 1.00
 Preemptive SJF has highest cpu utilization: 1.00
@@ -456,6 +527,8 @@ Aging Preemptive Priority has highest cpu utilization: 1.00
 Aging Nonpreemptive Priority has highest cpu utilization: 1.00
 Preemptive HRRN has highest cpu utilization: 1.00
 Nonpreemptive HRRN has highest cpu utilization: 1.00
+Preemptive CFS has highest cpu utilization: 1.00
+Nonpreemptive CFS has highest cpu utilization: 1.00
 All algorithms have same cpu utilization
 
 FCFS has highest throughput: 0.17
@@ -468,6 +541,8 @@ Aging Preemptive Priority has highest throughput: 0.17
 Aging Nonpreemptive Priority has highest throughput: 0.17
 Preemptive HRRN has highest throughput: 0.17
 Nonpreemptive HRRN has highest throughput: 0.17
+Preemptive CFS has highest throughput: 0.17
+Nonpreemptive CFS has highest throughput: 0.17
 All algorithms have same throughput
 
 FCFS has smallest idle time: 0
@@ -480,6 +555,8 @@ Aging Preemptive Priority has smallest idle time: 0
 Aging Nonpreemptive Priority has smallest idle time: 0
 Preemptive HRRN has smallest idle time: 0
 Nonpreemptive HRRN has smallest idle time: 0
+Preemptive CFS has smallest idle time: 0
+Nonpreemptive CFS has smallest idle time: 0
 All algorithms have same idle time
 
 FCFS has smallest context switch: 2
@@ -487,7 +564,8 @@ Nonpreemptive SJF has smallest context switch: 2
 Nonpreemptive Priority has smallest context switch: 2
 Aging Nonpreemptive Priority has smallest context switch: 2
 Nonpreemptive HRRN has smallest context switch: 2
-41% smaller than average (3.40)
+Nonpreemptive CFS has smallest context switch: 2
+43% smaller than average (3.50)
 ```
 
 ```
@@ -508,57 +586,55 @@ Burst Time: 10
 Priority: 7
 IO Count: 1
 IO 0 Request Time: 4
-IO 0 Burst Time: 2
+IO 0 Burst Time: 3
 ========================================
 
 ========================================
 Process 2
-Arrival Time: 38
+Arrival Time: 5
+Burst Time: 8
+Priority: 3
+IO Count: 2
+IO 0 Request Time: 1
+IO 0 Burst Time: 3
+IO 1 Request Time: 6
+IO 1 Burst Time: 5
+========================================
+
+========================================
+Process 3
+Arrival Time: 3
+Burst Time: 17
+Priority: 1
+IO Count: 1
+IO 0 Request Time: 13
+IO 0 Burst Time: 1
+========================================
+
+========================================
+Process 4
+Arrival Time: 31
 Burst Time: 6
-Priority: 8
+Priority: 5
 IO Count: 2
 IO 0 Request Time: 2
-IO 0 Burst Time: 1
+IO 0 Burst Time: 4
 IO 1 Request Time: 5
 IO 1 Burst Time: 4
 ========================================
 
 ========================================
-Process 3
-Arrival Time: 25
-Burst Time: 17
-Priority: 9
-IO Count: 1
-IO 0 Request Time: 1
-IO 0 Burst Time: 4
-========================================
-
-========================================
-Process 4
-Arrival Time: 11
-Burst Time: 16
-Priority: 5
-IO Count: 3
-IO 0 Request Time: 2
-IO 0 Burst Time: 4
-IO 1 Request Time: 6
-IO 1 Burst Time: 5
-IO 2 Request Time: 11
-IO 2 Burst Time: 1
-========================================
-
-========================================
 Process 5
-Arrival Time: 23
-Burst Time: 17
+Arrival Time: 19
+Burst Time: 16
 Priority: 6
 IO Count: 3
 IO 0 Request Time: 4
 IO 0 Burst Time: 2
 IO 1 Request Time: 9
-IO 1 Burst Time: 5
-IO 2 Request Time: 10
-IO 2 Burst Time: 2
+IO 1 Burst Time: 2
+IO 2 Request Time: 14
+IO 2 Burst Time: 5
 ========================================
 
 
@@ -568,31 +644,31 @@ Running FCFS
 Gantt chart
 ========================================
 
-|  idle  |   P4   |  idle  |   P4   |  idle  |   P5   |   P3   |   P4   |   P1   |   P5   |   P3   |   P4   |   P2   |   P1   |   P5   |   P2   |   P5   |   P2   |  idle  |
-0        11      13        17      21        23       27       28       33       37       42       58       63       65       71       72       75       82      83        fin
+|  idle  |   P3   |   P2   |   P3   |   P5   |   P2   |   P5   |   P1   |   P4   |   P2   |   P5   |   P1   |   P4   |   P5   |  idle  |   P4   |  idle  |
+0        3        16       17       21       25       30       35       39       41       43       48       54       57      59        61      62        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      28      10      7               1               71              43              31             5
-2       TERMINATED      38      6       8               2               83              45              34             25
-3       TERMINATED      25      17      9               1               58              33              12             2
-4       TERMINATED      11      16      5               3               63              52              26             0
-5       TERMINATED      23      17      6               3               82              59              33             0
+1       TERMINATED      28      10      7               1               54              26              13             7
+2       TERMINATED      5       8       3               2               43              38              22             11
+3       TERMINATED      3       17      1               1               21              18              0              0
+4       TERMINATED      31      6       5               2               62              31              17             8
+5       TERMINATED      19      16      6               3               59              40              15             2
 
 
-Average waiting time: 27.20     Max: 34, Min:12, Variance: 65.36
-Average turnaround time: 46.40  Max: 59, Min:33, Variance: 76.64
-Average response time: 6.40     Max: 25, Min: 0, Variance: 89.84
-Average completion time: 71.40  Max: 83, Min:58, Variance: 99.44
-CPU Utilization: 91.67%
-Throughput: 6.94 process per 100s
-CPU time: 66
-IO time: 30
-Idle time: 6
-Total time: 72
+Average waiting time: 13.40     Max: 22, Min: 0, Variance: 53.84
+Average turnaround time: 30.60  Max: 40, Min:18, Variance: 64.64
+Average response time: 5.60     Max: 11, Min: 0, Variance: 16.24
+Average completion time: 47.80  Max: 62, Min:21, Variance: 221.36
+CPU Utilization: 96.61%
+Throughput: 8.47 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 2
+Total time: 59
 Context switch: 13 times
 
 ========================================
@@ -603,32 +679,32 @@ Running SJF
 Gantt chart
 ========================================
 
-|  idle  |   P4   |  idle  |   P4   |  idle  |   P5   |   P4   |   P1   |   P4   |   P2   |   P1   |   P2   |   P5   |   P2   |   P3   |  idle  |   P5   |   P3   |   P5   |  idle  |
-0        11      13        17      21        23       27       32       36       41       43       49       52       57       58      59        62       63       79      86        fin
+|  idle  |   P3   |   P2   |   P3   |   P2   |   P3   |   P5   |   P2   |   P1   |   P4   |   P1   |   P5   |   P4   |   P1   |   P4   |   P5   |  idle  |   P5   |  idle  |   P5   |  idle  |
+0        3        5        6        17       22       26       28       30       31       33       36       38       41       47       48      53        55      60        65      67        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      28      10      7               1               49              21              9              4
-2       TERMINATED      38      6       8               2               58              20              9              3
-3       TERMINATED      25      17      9               1               79              54              33             33
-4       TERMINATED      11      16      5               3               41              30              4              0
-5       TERMINATED      23      17      6               3               86              63              37             0
+1       TERMINATED      28      10      7               1               47              19              6              2
+2       TERMINATED      5       8       3               2               30              25              9              0
+3       TERMINATED      3       17      1               1               26              23              5              0
+4       TERMINATED      31      6       5               2               48              17              3              0
+5       TERMINATED      19      16      6               3               67              48              23             7
 
 
-Average waiting time: 18.40     Max: 37, Min: 4, Variance: 188.64
-Average turnaround time: 37.60  Max: 63, Min:20, Variance: 311.44
-Average response time: 8.00     Max: 33, Min: 0, Variance: 158.80
-Average completion time: 62.60  Max: 86, Min:41, Variance: 297.84
-CPU Utilization: 88.00%
-Throughput: 6.67 process per 100s
-CPU time: 66
-IO time: 30
-Idle time: 9
-Total time: 75
-Context switch: 13 times
+Average waiting time: 9.20      Max: 23, Min: 3, Variance: 51.36
+Average turnaround time: 26.40  Max: 48, Min:17, Variance: 124.64
+Average response time: 1.80     Max:  7, Min: 0, Variance: 7.36
+Average completion time: 43.60  Max: 67, Min:26, Variance: 214.64
+CPU Utilization: 89.06%
+Throughput: 7.81 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 7
+Total time: 64
+Context switch: 14 times
 
 ========================================
 
@@ -638,32 +714,32 @@ Running SJF Non-Preemptive
 Gantt chart
 ========================================
 
-|  idle  |   P4   |  idle  |   P4   |  idle  |   P5   |   P4   |   P1   |   P4   |   P2   |   P1   |   P2   |   P5   |   P2   |   P3   |  idle  |   P5   |   P3   |   P5   |  idle  |
-0        11      13        17      21        23       27       32       36       41       43       49       52       57       58      59        62       63       79      86        fin
+|  idle  |   P3   |   P2   |   P3   |   P2   |   P5   |   P1   |   P2   |   P4   |   P1   |   P4   |   P5   |   P4   |  idle  |   P5   |  idle  |   P5   |  idle  |
+0        3        16       17       21       26       30       34       36       38       44       47       52      53        54      59        64      66        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      28      10      7               1               49              21              9              4
-2       TERMINATED      38      6       8               2               58              20              9              3
-3       TERMINATED      25      17      9               1               79              54              33             33
-4       TERMINATED      11      16      5               3               41              30              4              0
-5       TERMINATED      23      17      6               3               86              63              37             0
+1       TERMINATED      28      10      7               1               44              16              3              2
+2       TERMINATED      5       8       3               2               36              31              15             11
+3       TERMINATED      3       17      1               1               21              18              0              0
+4       TERMINATED      31      6       5               2               53              22              8              5
+5       TERMINATED      19      16      6               3               66              47              22             7
 
 
-Average waiting time: 18.40     Max: 37, Min: 4, Variance: 188.64
-Average turnaround time: 37.60  Max: 63, Min:20, Variance: 311.44
-Average response time: 8.00     Max: 33, Min: 0, Variance: 158.80
-Average completion time: 62.60  Max: 86, Min:41, Variance: 297.84
-CPU Utilization: 88.00%
-Throughput: 6.67 process per 100s
-CPU time: 66
-IO time: 30
-Idle time: 9
-Total time: 75
-Context switch: 13 times
+Average waiting time: 9.60      Max: 22, Min: 0, Variance: 64.24
+Average turnaround time: 26.80  Max: 47, Min:16, Variance: 128.56
+Average response time: 5.00     Max: 11, Min: 0, Variance: 14.80
+Average completion time: 44.00  Max: 66, Min:21, Variance: 231.60
+CPU Utilization: 90.48%
+Throughput: 7.94 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 6
+Total time: 63
+Context switch: 12 times
 
 ========================================
 
@@ -673,32 +749,32 @@ Running Priority
 Gantt chart
 ========================================
 
-|  idle  |   P4   |  idle  |   P4   |  idle  |   P5   |   P4   |   P5   |   P4   |   P5   |   P1   |   P5   |   P1   |   P2   |   P3   |   P2   |  idle  |   P3   |   P2   |  idle  |
-0        11      13        17      21        23       27       32       37       42       43       47       54       60       62       63      66        67       83      84        fin
+|  idle  |   P3   |   P2   |   P3   |   P2   |   P5   |   P1   |   P2   |   P4   |   P5   |   P4   |   P5   |   P4   |   P1   |  idle  |   P5   |   P1   |  idle  |
+0        3        16       17       21       26       30       31       33       35       40       43       48       49      52        53       55      61        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      28      10      7               1               60              32              20             15
-2       TERMINATED      38      6       8               2               84              46              35             22
-3       TERMINATED      25      17      9               1               83              58              37             37
-4       TERMINATED      11      16      5               3               42              31              5              0
-5       TERMINATED      23      17      6               3               54              31              5              0
+1       TERMINATED      28      10      7               1               61              33              20             2
+2       TERMINATED      5       8       3               2               33              28              12             11
+3       TERMINATED      3       17      1               1               21              18              0              0
+4       TERMINATED      31      6       5               2               49              18              4              2
+5       TERMINATED      19      16      6               3               55              36              11             7
 
 
-Average waiting time: 20.40     Max: 37, Min: 5, Variance: 192.64
-Average turnaround time: 39.60  Max: 58, Min:31, Variance: 117.04
-Average response time: 14.80    Max: 37, Min: 0, Variance: 196.56
-Average completion time: 64.60  Max: 84, Min:42, Variance: 271.84
-CPU Utilization: 90.41%
-Throughput: 6.85 process per 100s
-CPU time: 66
-IO time: 30
-Idle time: 7
-Total time: 73
-Context switch: 13 times
+Average waiting time: 9.40      Max: 20, Min: 0, Variance: 47.84
+Average turnaround time: 26.60  Max: 36, Min:18, Variance: 55.84
+Average response time: 4.40     Max: 11, Min: 0, Variance: 16.24
+Average completion time: 43.80  Max: 61, Min:21, Variance: 216.96
+CPU Utilization: 98.28%
+Throughput: 8.62 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 1
+Total time: 58
+Context switch: 14 times
 
 ========================================
 
@@ -708,31 +784,31 @@ Running Priority Non-Preemptive
 Gantt chart
 ========================================
 
-|  idle  |   P4   |  idle  |   P4   |  idle  |   P5   |   P4   |   P5   |   P4   |   P5   |   P1   |   P5   |   P1   |   P2   |   P3   |   P2   |  idle  |   P3   |   P2   |  idle  |
-0        11      13        17      21        23       27       32       37       42       43       47       54       60       62       63      66        67       83      84        fin
+|  idle  |   P3   |   P2   |   P3   |   P2   |   P5   |   P1   |   P2   |   P4   |   P5   |   P4   |   P5   |   P4   |   P1   |   P5   |  idle  |
+0        3        16       17       21       26       30       34       36       38       43       46       51       52       58      60        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      28      10      7               1               60              32              20             15
-2       TERMINATED      38      6       8               2               84              46              35             22
-3       TERMINATED      25      17      9               1               83              58              37             37
-4       TERMINATED      11      16      5               3               42              31              5              0
-5       TERMINATED      23      17      6               3               54              31              5              0
+1       TERMINATED      28      10      7               1               58              30              17             2
+2       TERMINATED      5       8       3               2               36              31              15             11
+3       TERMINATED      3       17      1               1               21              18              0              0
+4       TERMINATED      31      6       5               2               52              21              7              5
+5       TERMINATED      19      16      6               3               60              41              16             7
 
 
-Average waiting time: 20.40     Max: 37, Min: 5, Variance: 192.64
-Average turnaround time: 39.60  Max: 58, Min:31, Variance: 117.04
-Average response time: 14.80    Max: 37, Min: 0, Variance: 196.56
-Average completion time: 64.60  Max: 84, Min:42, Variance: 271.84
-CPU Utilization: 90.41%
-Throughput: 6.85 process per 100s
-CPU time: 66
-IO time: 30
-Idle time: 7
-Total time: 73
+Average waiting time: 11.00     Max: 17, Min: 0, Variance: 42.80
+Average turnaround time: 28.20  Max: 41, Min:18, Variance: 66.16
+Average response time: 5.00     Max: 11, Min: 0, Variance: 14.80
+Average completion time: 45.40  Max: 60, Min:21, Variance: 219.84
+CPU Utilization: 100.00%
+Throughput: 8.77 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 0
+Total time: 57
 Context switch: 13 times
 
 ========================================
@@ -743,32 +819,32 @@ Running RR
 Gantt chart
 ========================================
 
-|  idle  |   P4   |  idle  |   P4   |   P4   |  idle  |   P5   |   P5   |   P3   |   P4   |   P1   |   P5   |   P4   |   P1   |   P3   |   P5   |   P4   |   P2   |   P3   |   P1   |   P5   |   P4   |   P2   |   P3   |   P1   |   P4   |   P2   |   P5   |   P3   |   P1   |   P4   |   P3   |   P5   |   P2   |   P3   |   P5   |   P3   |   P5   |   P3   |   P5   |  idle  |
-0        11      13        17       19      21        23       25       27       28       30       32       34       36       38       40       42       43       45       47       49       50       52       54       56       58       60       61       62       64       66       67       69       71       72       74       76       78       80       82      83        fin
+|  idle  |   P3   |   P3   |   P2   |   P3   |   P3   |   P2   |   P3   |   P2   |   P3   |   P2   |   P5   |   P3   |   P5   |   P3   |   P2   |   P3   |   P1   |   P5   |   P4   |   P1   |   P5   |   P5   |   P4   |   P1   |   P4   |   P5   |   P1   |   P5   |   P1   |   P4   |   P5   |  idle  |   P5   |  idle  |
+0        3        5        7        8        10       12       14       16       18       20       21       23       24       26       28       30       32       34       36       38       40       42       43       45       47       48       50       52       54       56       57      58        63      65        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      28      10      7               1               66              38              26             2
-2       TERMINATED      38      6       8               2               72              34              23             5
-3       TERMINATED      25      17      9               1               82              57              36             2
-4       TERMINATED      11      16      5               3               67              56              30             0
-5       TERMINATED      23      17      6               3               83              60              34             0
+1       TERMINATED      28      10      7               1               56              28              15             4
+2       TERMINATED      5       8       3               2               30              25              9              2
+3       TERMINATED      3       17      1               1               32              29              11             0
+4       TERMINATED      31      6       5               2               57              26              12             5
+5       TERMINATED      19      16      6               3               65              46              21             2
 
 
-Average waiting time: 29.80     Max: 36, Min:23, Variance: 23.36
-Average turnaround time: 49.00  Max: 60, Min:34, Variance: 116.00
-Average response time: 1.80     Max:  5, Min: 0, Variance: 3.36
-Average completion time: 74.00  Max: 83, Min:66, Variance: 52.40
-CPU Utilization: 91.67%
-Throughput: 6.94 process per 100s
-CPU time: 66
-IO time: 30
-Idle time: 6
-Total time: 72
-Context switch: 33 times
+Average waiting time: 13.60     Max: 21, Min: 9, Variance: 17.44
+Average turnaround time: 30.80  Max: 46, Min:25, Variance: 59.76
+Average response time: 2.60     Max:  5, Min: 0, Variance: 3.04
+Average completion time: 48.00  Max: 65, Min:30, Variance: 202.80
+CPU Utilization: 91.94%
+Throughput: 8.06 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 5
+Total time: 62
+Context switch: 27 times
 
 ========================================
 
@@ -778,32 +854,32 @@ Running Aging Priority
 Gantt chart
 ========================================
 
-|  idle  |   P4   |  idle  |   P4   |  idle  |   P5   |   P4   |   P5   |   P4   |   P1   |   P5   |   P1   |   P3   |   P2   |   P1   |   P5   |   P3   |   P5   |   P1   |   P3   |   P5   |   P2   |   P3   |   P2   |   P3   |  idle  |   P2   |  idle  |
-0        11      13        17      21        23       27       32       34       39       41       44       46       47       49       54       55       58       64       65       68       69       71       78       79      82        83      84        fin
+|  idle  |   P3   |   P2   |   P3   |   P2   |   P5   |   P1   |   P2   |   P4   |   P5   |   P1   |   P4   |   P5   |   P1   |   P4   |  idle  |   P1   |   P5   |   P1   |  idle  |
+0        3        16       17       21       26       30       31       33       35       40       42       45       50       51      52        54       57       59      62        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      28      10      2               1               65              37              25             11
-2       TERMINATED      38      6       1               2               84              46              35             9
-3       TERMINATED      25      17      2               1               82              57              36             21
-4       TERMINATED      11      16      5               3               39              28              2              0
-5       TERMINATED      23      17      2               3               69              46              20             0
+1       TERMINATED      28      10      3               1               62              34              21             2
+2       TERMINATED      5       8       1               2               33              28              12             11
+3       TERMINATED      3       17      1               1               21              18              0              0
+4       TERMINATED      31      6       4               2               52              21              7              2
+5       TERMINATED      19      16      3               3               59              40              15             7
 
 
-Average waiting time: 23.60     Max: 36, Min: 2, Variance: 153.04
-Average turnaround time: 42.80  Max: 57, Min:28, Variance: 94.96
-Average response time: 8.20     Max: 21, Min: 0, Variance: 61.36
-Average completion time: 67.80  Max: 84, Min:39, Variance: 260.56
-CPU Utilization: 90.41%
-Throughput: 6.85 process per 100s
-CPU time: 66
-IO time: 30
-Idle time: 7
-Total time: 73
-Context switch: 21 times
+Average waiting time: 11.00     Max: 21, Min: 0, Variance: 50.80
+Average turnaround time: 28.20  Max: 40, Min:18, Variance: 65.76
+Average response time: 4.40     Max: 11, Min: 0, Variance: 16.24
+Average completion time: 45.40  Max: 62, Min:21, Variance: 250.64
+CPU Utilization: 96.61%
+Throughput: 8.47 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 2
+Total time: 59
+Context switch: 16 times
 
 ========================================
 
@@ -813,32 +889,32 @@ Running Aging Priority Non-Preemptive
 Gantt chart
 ========================================
 
-|  idle  |   P4   |  idle  |   P4   |  idle  |   P5   |   P4   |   P5   |   P4   |   P1   |   P3   |   P5   |   P1   |   P5   |   P3   |   P2   |  idle  |   P2   |  idle  |   P2   |  idle  |
-0        11      13        17      21        23       27       32       37       42       46       47       48       54       61       77      79        80      83        87      88        fin
+|  idle  |   P3   |   P2   |   P3   |   P2   |   P5   |   P1   |   P2   |   P4   |   P5   |   P4   |   P5   |   P1   |   P4   |   P5   |  idle  |
+0        3        16       17       21       26       30       34       36       38       43       46       51       57       58      60        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      28      10      5               1               54              26              14             14
-2       TERMINATED      38      6       1               2               88              50              39             39
-3       TERMINATED      25      17      3               1               77              52              31             21
-4       TERMINATED      11      16      4               3               42              31              5              0
-5       TERMINATED      23      17      4               3               61              38              12             0
+1       TERMINATED      28      10      4               1               57              29              16             2
+2       TERMINATED      5       8       0               2               36              31              15             11
+3       TERMINATED      3       17      1               1               21              18              0              0
+4       TERMINATED      31      6       3               2               58              27              13             5
+5       TERMINATED      19      16      3               3               60              41              16             7
 
 
-Average waiting time: 20.20     Max: 39, Min: 5, Variance: 161.36
-Average turnaround time: 39.40  Max: 52, Min:26, Variance: 104.64
-Average response time: 14.80    Max: 39, Min: 0, Variance: 212.56
-Average completion time: 64.40  Max: 88, Min:42, Variance: 267.44
-CPU Utilization: 85.71%
-Throughput: 6.49 process per 100s
-CPU time: 66
-IO time: 30
-Idle time: 11
-Total time: 77
-Context switch: 11 times
+Average waiting time: 12.00     Max: 16, Min: 0, Variance: 37.20
+Average turnaround time: 29.20  Max: 41, Min:18, Variance: 54.56
+Average response time: 5.00     Max: 11, Min: 0, Variance: 14.80
+Average completion time: 46.40  Max: 60, Min:21, Variance: 237.04
+CPU Utilization: 100.00%
+Throughput: 8.77 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 0
+Total time: 57
+Context switch: 13 times
 
 ========================================
 
@@ -848,32 +924,32 @@ Running HRRN
 Gantt chart
 ========================================
 
-|  idle  |   P4   |  idle  |   P4   |  idle  |   P5   |   P3   |   P4   |   P5   |   P4   |   P1   |   P4   |   P1   |   P4   |   P1   |   P5   |   P4   |   P3   |   P5   |   P1   |   P2   |   P3   |   P2   |   P1   |   P2   |   P1   |   P2   |   P1   |   P4   |   P5   |   P4   |   P3   |   P5   |   P2   |   P4   |   P3   |   P5   |   P4   |   P3   |   P4   |   P3   |   P5   |   P3   |   P5   |   P3   |   P5   |   P3   |   P5   |  idle  |
-0        11      13        17      21        23       26       27       28       29       30       32       33       34       35       36       37       38       39       40       42       43       44       45       47       49       50       51       52       53       54       55       56       57       58       59       60       61       62       63       64       69       70       73       75       77       79       80      83        fin
+|  idle  |   P3   |   P2   |   P3   |   P2   |   P3   |   P2   |   P3   |   P2   |   P3   |   P5   |   P3   |   P5   |   P3   |   P5   |   P1   |   P5   |   P4   |   P1   |   P5   |   P1   |   P5   |   P4   |   P5   |   P4   |   P1   |   P5   |   P1   |   P4   |   P1   |   P5   |  idle  |   P5   |  idle  |
+0        3        6        7        11       15       16       17       22       24       26       27       28       29       30       32       34       35       37       38       39       40       42       43       44       46       50       51       52       53       54      58        63      65        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      28      10      -2200           1               52              24              12             2
-2       TERMINATED      38      6       -2500           2               58              20              9              4
-3       TERMINATED      25      17      -3000           1               80              55              34             1
-4       TERMINATED      11      16      -2687           3               64              53              27             0
-5       TERMINATED      23      17      -3000           3               83              60              34             0
+1       TERMINATED      28      10      -2300           1               54              26              13             4
+2       TERMINATED      5       8       -1375           2               24              19              3              1
+3       TERMINATED      3       17      -1529           1               30              27              9              0
+4       TERMINATED      31      6       -2333           2               53              22              8              4
+5       TERMINATED      19      16      -2312           3               65              46              21             7
 
 
-Average waiting time: 23.20     Max: 34, Min: 9, Variance: 114.96
-Average turnaround time: 42.40  Max: 60, Min:20, Variance: 284.24
-Average response time: 1.40     Max:  4, Min: 0, Variance: 2.24
-Average completion time: 67.40  Max: 83, Min:52, Variance: 147.84
-CPU Utilization: 91.67%
-Throughput: 6.94 process per 100s
-CPU time: 66
-IO time: 30
-Idle time: 6
-Total time: 72
-Context switch: 43 times
+Average waiting time: 10.80     Max: 21, Min: 3, Variance: 36.16
+Average turnaround time: 28.00  Max: 46, Min:19, Variance: 89.20
+Average response time: 3.20     Max:  7, Min: 0, Variance: 6.16
+Average completion time: 45.20  Max: 65, Min:24, Variance: 242.16
+CPU Utilization: 91.94%
+Throughput: 8.06 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 5
+Total time: 62
+Context switch: 29 times
 
 ========================================
 
@@ -883,31 +959,101 @@ Running HRRN Non-Preemptive
 Gantt chart
 ========================================
 
-|  idle  |   P4   |  idle  |   P4   |  idle  |   P5   |   P3   |   P4   |   P1   |   P5   |   P1   |   P2   |   P3   |   P2   |   P4   |   P2   |   P5   |  idle  |   P5   |  idle  |
-0        11      13        17      21        23       27       28       33       37       42       48       50       66       69       74       75      76        78      85        fin
+|  idle  |   P3   |   P2   |   P3   |   P2   |   P5   |   P1   |   P2   |   P4   |   P5   |   P4   |   P1   |   P4   |   P5   |  idle  |   P5   |  idle  |
+0        3        16       17       21       26       30       34       36       38       43       46       52       53      58        63      65        fin
 
 
 Process table
 ========================================
 PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
 --------------------------------------------------------------------------------------------------------------------------------------
-1       TERMINATED      28      10      -1800           1               48              20              8              5
-2       TERMINATED      38      6       -5333           2               75              37              26             10
-3       TERMINATED      25      17      -2176           1               66              41              20             2
-4       TERMINATED      11      16      -3312           3               74              63              37             0
-5       TERMINATED      23      17      -3117           3               85              62              36             0
+1       TERMINATED      28      10      -2100           1               52              24              11             2
+2       TERMINATED      5       8       -2875           2               36              31              15             11
+3       TERMINATED      3       17      0               1               21              18              0              0
+4       TERMINATED      31      6       -2333           2               53              22              8              5
+5       TERMINATED      19      16      -2312           3               65              46              21             7
 
 
-Average waiting time: 25.40     Max: 37, Min: 8, Variance: 115.84
-Average turnaround time: 44.60  Max: 63, Min:20, Variance: 263.44
-Average response time: 3.40     Max: 10, Min: 0, Variance: 14.24
-Average completion time: 69.60  Max: 85, Min:48, Variance: 153.04
-CPU Utilization: 89.19%
-Throughput: 6.76 process per 100s
-CPU time: 66
-IO time: 30
-Idle time: 8
-Total time: 74
+Average waiting time: 11.00     Max: 21, Min: 0, Variance: 49.20
+Average turnaround time: 28.20  Max: 46, Min:18, Variance: 96.96
+Average response time: 5.00     Max: 11, Min: 0, Variance: 14.80
+Average completion time: 45.40  Max: 65, Min:21, Variance: 233.84
+CPU Utilization: 91.94%
+Throughput: 8.06 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 5
+Total time: 62
+Context switch: 12 times
+
+========================================
+
+
+Running CFS
+
+Gantt chart
+========================================
+
+|  idle  |   P3   |   P2   |   P3   |   P2   |   P3   |   P5   |   P2   |   P5   |   P1   |   P4   |   P3   |   P1   |   P4   |   P5   |   P3   |   P1   |   P4   |   P5   |   P3   |   P1   |   P5   |   P1   |  idle  |   P5   |  idle  |   P5   |  idle  |
+0        3        6        7        11       16       20       24       26       28       32       34       36       39       42       43       45       46       47       48       50       51       52      53        54      59        64      66        fin
+
+
+Process table
+========================================
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
+--------------------------------------------------------------------------------------------------------------------------------------
+1       TERMINATED      28      10      20              1               53              25              12             0
+2       TERMINATED      5       8       8               2               26              21              5              1
+3       TERMINATED      3       17      17              1               50              47              29             0
+4       TERMINATED      31      6       12              2               47              16              2              1
+5       TERMINATED      19      16      32              3               66              47              22             1
+
+
+Average waiting time: 14.00     Max: 29, Min: 2, Variance: 103.60
+Average turnaround time: 31.20  Max: 47, Min:16, Variance: 174.56
+Average response time: 0.60     Max:  1, Min: 0, Variance: 0.24
+Average completion time: 48.40  Max: 66, Min:26, Variance: 167.44
+CPU Utilization: 90.48%
+Throughput: 7.94 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 6
+Total time: 63
+Context switch: 22 times
+
+========================================
+
+
+Running CFS Non-Preemptive
+
+Gantt chart
+========================================
+
+|  idle  |   P3   |   P2   |   P3   |   P5   |   P2   |   P1   |   P4   |   P2   |   P5   |   P4   |   P1   |   P4   |   P5   |  idle  |   P5   |  idle  |
+0        3        16       17       21       25       30       34       36       38       43       46       52       53      58        63      65        fin
+
+
+Process table
+========================================
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
+--------------------------------------------------------------------------------------------------------------------------------------
+1       TERMINATED      28      10      20              1               52              24              11             2
+2       TERMINATED      5       8       8               2               38              33              17             11
+3       TERMINATED      3       17      17              1               21              18              0              0
+4       TERMINATED      31      6       12              2               53              22              8              3
+5       TERMINATED      19      16      32              3               65              46              21             2
+
+
+Average waiting time: 11.40     Max: 21, Min: 0, Variance: 53.04
+Average turnaround time: 28.60  Max: 46, Min:18, Variance: 99.84
+Average response time: 3.60     Max: 11, Min: 0, Variance: 14.64
+Average completion time: 45.80  Max: 65, Min:21, Variance: 226.96
+CPU Utilization: 91.94%
+Throughput: 8.06 process per 100s
+CPU time: 57
+IO time: 29
+Idle time: 5
+Total time: 62
 Context switch: 12 times
 
 ========================================
@@ -916,42 +1062,38 @@ Context switch: 12 times
 
 Comparation
 ========================================
-Preemptive SJF has shortest average waiting time: 18.40
-Nonpreemptive SJF has shortest average waiting time: 18.40
-19% shorter than average (22.70)
+Preemptive SJF has shortest average waiting time: 9.20
+19% shorter than average (11.37)
 
-Preemptive SJF has shortest average turnaround time: 37.60
-Nonpreemptive SJF has shortest average turnaround time: 37.60
-10% shorter than average (41.90)
+Preemptive SJF has shortest average turnaround time: 26.40
+8% shorter than average (28.57)
 
-Preemptive HRRN has shortest average response time: 1.40
-83% shorter than average (8.16)
+Preemptive CFS has shortest average response time: 0.60
+84% shorter than average (3.85)
 
-FCFS has shortest max completion time: 83
-RR has shortest max completion time: 83
-Preemptive HRRN has shortest max completion time: 83
-2% shorter than average (84.60)
+Nonpreemptive Priority has shortest max completion time: 60
+Aging Nonpreemptive Priority has shortest max completion time: 60
+6% shorter than average (63.67)
 
-RR has smallest variance of waiting time: 23.36
-83% smaller than average (139.65)
+RR has smallest variance of waiting time: 17.44
+66% smaller than average (50.63)
 
-FCFS has highest cpu utilization: 0.92
-RR has highest cpu utilization: 0.92
-Preemptive HRRN has highest cpu utilization: 0.92
-2% higher than average (0.90)
+Nonpreemptive Priority has highest cpu utilization: 1.00
+Aging Nonpreemptive Priority has highest cpu utilization: 1.00
+6% higher than average (0.94)
 
-FCFS has highest throughput: 0.07
-RR has highest throughput: 0.07
-Preemptive HRRN has highest throughput: 0.07
-2% higher than average (0.07)
+Nonpreemptive Priority has highest throughput: 0.09
+Aging Nonpreemptive Priority has highest throughput: 0.09
+6% higher than average (0.08)
 
-FCFS has smallest idle time: 6
-RR has smallest idle time: 6
-Preemptive HRRN has smallest idle time: 6
-21% smaller than average (7.60)
+Nonpreemptive Priority has smallest idle time: 0
+Aging Nonpreemptive Priority has smallest idle time: 0
+100% smaller than average (3.67)
 
-Aging Nonpreemptive Priority has smallest context switch: 11
-41% smaller than average (18.50)
+Nonpreemptive SJF has smallest context switch: 12
+Nonpreemptive HRRN has smallest context switch: 12
+Nonpreemptive CFS has smallest context switch: 12
+27% smaller than average (16.42)
 ```
 
 ```
@@ -1357,37 +1499,111 @@ Context switch: 11 times
 ========================================
 
 
+Running CFS
+
+Gantt chart
+========================================
+
+|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P1   |   P4   |   P3   |   P1   |   P3   |   P4   |   P1   |   P4   |   P2   |   P4   |   P3   |   P2   |   P4   |   P1   |   P3   |   P2   |   P3   |  idle  |
+0        15      18        19       22       25       29       31       33       35       36       39       41       45       47       49       50       52       54       56       58       60       63      65        fin
+
+
+Process table
+========================================
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
+--------------------------------------------------------------------------------------------------------------------------------------
+1       TERMINATED      15      15      30              2               58              43              20             0
+2       TERMINATED      46      7       14              2               63              17              3              1
+3       TERMINATED      19      18      36              2               65              46              25             0
+4       TERMINATED      30      9       18              3               56              26              7              1
+
+
+Average waiting time: 13.75     Max: 25, Min: 3, Variance: 81.69
+Average turnaround time: 33.00  Max: 46, Min:17, Variance: 143.50
+Average response time: 0.50     Max:  1, Min: 0, Variance: 0.25
+Average completion time: 60.50  Max: 65, Min:56, Variance: 13.25
+CPU Utilization: 98.00%
+Throughput: 8.00 process per 100s
+CPU time: 49
+IO time: 28
+Idle time: 1
+Total time: 50
+Context switch: 20 times
+
+========================================
+
+
+Running CFS Non-Preemptive
+
+Gantt chart
+========================================
+
+|  idle  |   P1   |  idle  |   P3   |   P1   |   P3   |   P4   |   P1   |   P4   |   P2   |   P3   |   P2   |   P4   |  idle  |   P4   |   P2   |  idle  |
+0        15      18        19       22       28       37       39       45       47       49       55       57      60        61       63      66        fin
+
+
+Process table
+========================================
+PID     State           Arrival Burst   Priority        IO count        Completion      Turnaround      Waiting        Response
+--------------------------------------------------------------------------------------------------------------------------------------
+1       TERMINATED      15      15      30              2               45              30              7              0
+2       TERMINATED      46      7       14              2               66              20              6              1
+3       TERMINATED      19      18      36              2               55              36              15             0
+4       TERMINATED      30      9       18              3               63              33              14             7
+
+
+Average waiting time: 10.50     Max: 15, Min: 6, Variance: 16.25
+Average turnaround time: 29.75  Max: 36, Min:20, Variance: 36.19
+Average response time: 2.00     Max:  7, Min: 0, Variance: 8.50
+Average completion time: 57.25  Max: 66, Min:45, Variance: 66.19
+CPU Utilization: 96.08%
+Throughput: 7.84 process per 100s
+CPU time: 49
+IO time: 28
+Idle time: 2
+Total time: 51
+Context switch: 11 times
+
+========================================
+
+
 
 Comparation
 ========================================
 Nonpreemptive SJF has shortest average waiting time: 9.50
 Nonpreemptive Priority has shortest average waiting time: 9.50
-11% shorter than average (10.62)
+13% shorter than average (10.88)
 
 Nonpreemptive SJF has shortest average turnaround time: 28.75
 Nonpreemptive Priority has shortest average turnaround time: 28.75
-4% shorter than average (29.88)
+5% shorter than average (30.12)
 
-RR has shortest average response time: 0.75
-81% shorter than average (3.92)
+Preemptive CFS has shortest average response time: 0.50
+86% shorter than average (3.48)
 
 RR has shortest max completion time: 65
-6% shorter than average (69.40)
+Preemptive CFS has shortest max completion time: 65
+5% shorter than average (68.75)
 
 Nonpreemptive HRRN has smallest variance of waiting time: 4.69
-85% smaller than average (31.88)
+87% smaller than average (34.73)
 
 RR has highest cpu utilization: 0.98
-9% higher than average (0.90)
+Preemptive CFS has highest cpu utilization: 0.98
+7% higher than average (0.91)
 
 RR has highest throughput: 0.08
-9% higher than average (0.07)
+Preemptive CFS has highest throughput: 0.08
+7% higher than average (0.07)
 
 RR has smallest idle time: 1
-81% smaller than average (5.40)
+Preemptive CFS has smallest idle time: 1
+79% smaller than average (4.75)
 
 Nonpreemptive SJF has smallest context switch: 11
 Preemptive Priority has smallest context switch: 11
 Nonpreemptive Priority has smallest context switch: 11
 Nonpreemptive HRRN has smallest context switch: 11
-23% smaller than average (14.30)
+Nonpreemptive CFS has smallest context switch: 11
+24% smaller than average (14.50)
+```
