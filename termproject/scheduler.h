@@ -22,5 +22,7 @@ void run_priority_nonpreemptive();
 void run_rr();
 void run_aging_priority();
 void run_aging_priority_nonpreemptive();
+void run_hrrn();
+void run_hrrn_nonpreemptive();
 
 #endif

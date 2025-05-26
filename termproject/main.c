@@ -77,6 +77,14 @@ int main(){
     run_aging_priority_nonpreemptive();
     evaluate("Aging Nonpreemptive Priority");
 
+    printf("\nRunning HRRN\n");
+    run_hrrn();
+    evaluate("Preemptive HRRN");
+
+    printf("\nRunning HRRN Non-Preemptive\n");
+    run_hrrn_nonpreemptive();
+    evaluate("Nonpreemptive HRRN");
+
     compare();
     return 0;
 }
